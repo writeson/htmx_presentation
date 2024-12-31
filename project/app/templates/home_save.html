@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My HTML5 Template</title>
+    <!-- Link to your external stylesheet -->
+    <link rel="stylesheet" href="/static/css/bulma/css/bulma.min.css">
+    <!-- Link to your htmx JavaScript file -->
+    <script src="/static/js/htmx.min.js"></script>
+</head>
+<body>
+<!-- Navigation Section -->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item">
+                Home
+            </a>
+
+            <a class="navbar-item">
+                About
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content Section -->
+<main>
+    <h1>Welcome to My Website</h1>
+    <p>This is a simple HTML5 template to get you started.</p>
+    <div
+        id="artists_list"
+        hx-get="/application/artists"
+        hx-target="#artists_list"
+        hx-trigger="load">
+    </div>
+</main>
+
+<!-- Footer Section -->
+<footer>
+    <p>&copy; 2024 My Website. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

@@ -26,8 +26,9 @@ async def init_db():
     """Initialize the database and create tables if they don't exist."""
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
-        await TextSearchManager.create_virtual_table(conn)
-        return "Text search initialized successfully"
+        # await TextSearchManager.create_virtual_table(conn)
+        # return "Text search initialized successfully"
+        return "Database initialized successfully"
 
 
 @asynccontextmanager

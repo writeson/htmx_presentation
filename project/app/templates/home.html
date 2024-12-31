@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chinook Music Database</title>
+  <!-- Link to your external stylesheet -->
+  <link rel="stylesheet" href="/static/css/bulma/css/bulma.min.css">
+  <script src="https://kit.fontawesome.com/336253754b.js" crossorigin="anonymous"></script>
+  <style>
+    .sort-icon { cursor: pointer; }
+    .sort-icon.active { color: #485fc7; }
+    .pagination-ellipsis { pointer-events: none; }
+  </style>
+</head>
+<body>
+
+<section class="section">
+  <div class="container">
+    <!-- Header -->
+    <div class="box">
+      <h1 class="title is-3">Chinook Music Database</h1>
+      <p class="subtitle is-5">Explore your music collection - search through tracks, artists, and albums</p>
+
+      <div class="columns">
+        <div class="column is-6">
+          <div class="field">
+            <p class="control has-icons-left">
+              <input class="input" type="text" placeholder="Search music..." id="searchInput">
+              <span class="icon is-small is-left">
+                <i class="fas fa-search"></i>
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="column is-3">
+          <div class="field">
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select id="filterField">
+                  <option value="all">All Fields</option>
+                  <option value="name">Name</option>
+                  <option value="artist">Artist</option>
+                  <option value="album">Album</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-3">
+          <div class="field">
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select id="itemsPerPage">
+                  <option value="5">5 per page</option>
+                  <option value="10" selected>10 per page</option>
+                  <option value="20">20 per page</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs is-centered is-boxed">
+      <ul>
+        <li class="is-active" data-tab="tracks">
+          <a>
+            <span class="icon is-small"><i class="fas fa-music"></i></span>
+            <span>Tracks</span>
+          </a>
+        </li>
+        <li data-tab="artists">
+          <a>
+            <span class="icon is-small"><i class="fas fa-users"></i></span>
+            <span>Artists</span>
+          </a>
+        </li>
+        <li data-tab="albums">
+          <a>
+            <span class="icon is-small"><i class="fas fa-compact-disc"></i></span>
+            <span>Albums</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Tracks Table -->
+    <div class="box content-box" id="tracks-content">
+      <h2 class="title is-4">Tracks</h2>
+      <p class="subtitle is-6">Browse through our music collection</p>
+
+      <div class="table-container">
+        <table class="table is-fullwidth is-striped is-hoverable">
+          <thead>
+          <tr>
+            <th>
+              Name
+              <span class="icon sort-icon" data-sort="name">
+                  <i class="fas fa-sort"></i>
+                </span>
+            </th>
+            <th>
+              Artist
+              <span class="icon sort-icon" data-sort="artist">
+                  <i class="fas fa-sort"></i>
+                </span>
+            </th>
+            <th>
+              Album
+              <span class="icon sort-icon" data-sort="album">
+                  <i class="fas fa-sort"></i>
+                </span>
+            </th>
+            <th>
+              Duration
+              <span class="icon sort-icon" data-sort="duration">
+                  <i class="fas fa-sort"></i>
+                </span>
+            </th>
+            <th>
+              Price
+              <span class="icon sort-icon" data-sort="price">
+                  <i class="fas fa-sort"></i>
+                </span>
+            </th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody id="tracks-body">
+          <!-- Populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <a class="pagination-previous">Previous</a>
+        <a class="pagination-next">Next</a>
+        <ul class="pagination-list">
+          <!-- Populated by JavaScript -->
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Stats Tiles -->
+    <div class="box">
+      <div class="tile is-ancestor">
+        <div class="tile is-parent">
+          <article class="tile is-child">
+            <p class="heading">
+              <span class="icon">
+                <i class="fas fa-clock"></i>
+              </span>
+              Total Duration
+            </p>
+            <p class="title">347 hours</p>
+          </article>
+        </div>
+        <div class="tile is-parent">
+          <article class="tile is-child">
+            <p class="heading">
+              <span class="icon">
+                <i class="fas fa-music"></i>
+              </span>
+              Total Tracks
+            </p>
+            <p class="title" id="totalItems">0</p>
+          </article>
+        </div>
+        <div class="tile is-parent">
+          <article class="tile is-child">
+            <p class="heading">
+              <span class="icon">
+                <i class="fas fa-tags"></i>
+              </span>
+              Genres
+            </p>
+            <p class="title">25</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal for track details -->
+<div class="modal" id="trackModal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Track Details</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Populated by JavaScript -->
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success">Add to Playlist</button>
+      <button class="button">Close</button>
+    </footer>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Mock data
+    let tracks = Array.from({ length: 50 }, (_, i) => ({
+      id: i + 1,
+      name: `Track ${i + 1}`,
+      artist: `Artist ${Math.floor(i / 3) + 1}`,
+      album: `Album ${Math.floor(i / 5) + 1}`,
+      duration: `${Math.floor(Math.random() * 5) + 2}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`,
+      price: '$0.99',
+      genre: ['Rock', 'Pop', 'Jazz', 'Classical'][Math.floor(Math.random() * 4)],
+      releaseDate: `202${Math.floor(Math.random() * 4)}`
+    }));
+
+    // State management
+    let state = {
+      currentPage: 1,
+      itemsPerPage: 10,
+      sortField: null,
+      sortDirection: 'asc',
+      filterText: '',
+      filterField: 'all'
+    };
+
+    // Sorting function
+    function sortData(data, field, direction) {
+      return [...data].sort((a, b) => {
+        let comparison = a[field] > b[field] ? 1 : -1;
+        return direction === 'asc' ? comparison : -comparison;
+      });
+    }
+
+    // Filtering function
+    function filterData(data) {
+      if (!state.filterText) return data;
+
+      return data.filter(item => {
+        if (state.filterField === 'all') {
+          return Object.values(item).some(val =>
+                  String(val).toLowerCase().includes(state.filterText.toLowerCase())
+          );
+        }
+        return String(item[state.filterField])
+                .toLowerCase()
+                .includes(state.filterText.toLowerCase());
+      });
+    }
+
+    // Update table function
+    function updateTable() {
+      const filteredData = filterData(tracks);
+      const sortedData = state.sortField
+              ? sortData(filteredData, state.sortField, state.sortDirection)
+              : filteredData;
+
+      const start = (state.currentPage - 1) * state.itemsPerPage;
+      const paginatedData = sortedData.slice(start, start + state.itemsPerPage);
+
+      const tbody = document.getElementById('tracks-body');
+      tbody.innerHTML = '';
+
+      paginatedData.forEach(track => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+        <td>${track.name}</td>
+        <td>${track.artist}</td>
+        <td>${track.album}</td>
+        <td>${track.duration}</td>
+        <td>${track.price}</td>
+        <td>
+          <button class="button is-small is-info view-details" data-id="${track.id}">
+            <span class="icon is-small">
+              <i class="fas fa-info-circle"></i>
+            </span>
+          </button>
+        </td>
+      `;
+        tbody.appendChild(row);
+      });
+
+      updatePagination(filteredData.length);
+      document.getElementById('totalItems').textContent = filteredData.length;
+    }
+
+    // Update pagination controls
+    function updatePagination(totalItems) {
+      const totalPages = Math.ceil(totalItems / state.itemsPerPage);
+      const paginationList = document.querySelector('.pagination-list');
+      paginationList.innerHTML = '';
+
+      // Previous button
+      document.querySelector('.pagination-previous').disabled = state.currentPage === 1;
+      document.querySelector('.pagination-next').disabled = state.currentPage === totalPages;
+
+      // Generate page numbers
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || Math.abs(i - state.currentPage) <= 1) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.className = `pagination-link ${i === state.currentPage ? 'is-current' : ''}`;
+          a.setAttribute('aria-label', `Go to page ${i}`);
+          a.textContent = i;
+          a.onclick = () => {
+            state.currentPage = i;
+            updateTable();
+          };
+          li.appendChild(a);
+          paginationList.appendChild(li);
+        } else if (i === 2 || i === totalPages - 1) {
+          const li = document.createElement('li');
+          const span = document.createElement('span');
+          span.className = 'pagination-ellipsis';
+          span.innerHTML = '&hellip;';
+          li.appendChild(span);
+          paginationList.appendChild(li);
+        }
+      }
+    }
+
+    // Event Listeners
+    document.querySelectorAll('.sort-icon').forEach(icon => {
+      icon.addEventListener('click', () => {
+        const field = icon.dataset.sort;
+        if (state.sortField === field) {
+          state.sortDirection = state.sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          state.sortField = field;
+          state.sortDirection = 'asc';
+        }
+
+        // Update sort icons
+        document.querySelectorAll('.sort-icon').forEach(i => {
+          i.querySelector('i').className = 'fas fa-sort';
+          i.classList.remove('active');
+        });
+
+        icon.classList.add('active');
+        icon.querySelector('i').className = `fas fa-sort-${state.sortDirection === 'asc' ? 'up' : 'down'}`;
+
+        state.currentPage = 1;
+        updateTable();
+      });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      state.filterText = e.target.value;
+      state.currentPage = 1;
+      updateTable();
+    });
+
+    document.getElementById('filterField').addEventListener('change', (e) => {
+      state.filterField = e.target.value;
+      state.currentPage = 1;
+      updateTable();
+    });
+
+    document.getElementById('itemsPerPage').addEventListener('change', (e) => {
+      state.itemsPerPage = parseInt(e.target.value);
+      state.currentPage = 1;
+      updateTable();
+    });
+
+    document.querySelector('.pagination-previous').addEventListener('click', () => {
+      if (state.currentPage > 1) {
+        state.currentPage--;
+        updateTable();
+      }
+    });
+
+    document.querySelector('.pagination-next').addEventListener('click', () => {
+      const totalPages = Math.ceil(filterData(tracks).length / state.itemsPerPage);
+      if (state.currentPage < totalPages) {
+        state.currentPage++;
+        updateTable();
+      }
+    });
+
+    // Modal functionality
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.view-details')) {
+        const trackId = e.target.closest('.view-details').dataset.id;
+        const track = tracks.find(t => t.id === parseInt(trackId));
+
+        const modal = document.getElementById('trackModal');
+        modal.querySelector('.modal-card-body').innerHTML = `
+        <div class="content">
+          <h3>${track.name}</h3>
+          <p><strong>Artist:</strong> ${track.artist}</p>
+          <p><strong>Album:</strong> ${track.album}</p>
+          <p><strong>Duration:</strong> ${track.duration}</p>
+          <p><strong>Price:</strong> ${track.price}</p>
+          <p><strong>Genre:</strong> ${track.genre}</p>
+          <p><strong>Release Date:</strong> ${track.releaseDate}</p>
+        </div>
+      `;
+        modal.classList.add('is-active');
+      }
+    });
+
+    // Close modal
+    document.querySelectorAll('.modal .delete, .modal .button').forEach(button => {
+      button.addEventListener('click', () => {
+        document.getElementById('trackModal').classList.remove('is-active');
+      });
+    });
+
+    // Initial load
+    updateTable();
+  });
+</script>
+
+</body>
+</html>

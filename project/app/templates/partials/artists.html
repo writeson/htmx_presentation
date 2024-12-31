@@ -1,0 +1,9 @@
+<ul>
+    {% for artist in artists %}
+    <li>
+        {{ artist.name }}
+    </li>
+    {% else %}
+    <li>No artists found.</li>
+    {% endfor %}
+</ul>

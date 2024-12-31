@@ -15,9 +15,11 @@ available here: https://www.sqlitetutorial.net/sqlite-sample-database/
 from typing import Dict
 from logging import getLogger
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from middleware import log_middleware, MetadataMiddleware
@@ -36,7 +38,8 @@ from app.models import invoice_items
 from app.models import customers
 from app.models import employees
 from app.endpoints.routes import build_routes
-from app.endpoints.search import router as search_router
+# from app.endpoints.search import router as search_router
+from app.endpoints.application import router as application_router
 from logger_config import setup_logging
 
 
@@ -91,13 +94,20 @@ def app_factory():
     fastapi_app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
     fastapi_app.add_middleware(MetadataMiddleware)
 
+    # serve the static files
+    static_dir = Path(__file__).resolve().parent / "static"
+    fastapi_app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
     # add all the endpoint routes
     for route_config in get_routes_config():
         fastapi_app.include_router(build_routes(**route_config), prefix="/api/v1")
 
     # add the search route
-    fastapi_app.include_router(search_router, prefix="/api/v1")
-
+    # fastapi_app.include_router(search_router, prefix="/api/v1")
+    
+    # add the application route
+    fastapi_app.include_router(application_router, prefix="/application")
+    
     return fastapi_app
 
 
