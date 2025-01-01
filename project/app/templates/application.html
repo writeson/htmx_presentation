@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% include "header.html" %}
+
+{% block application %}
+    <section class="section">
+        <div class="container">
+            {% block header %}{% endblock header %}
+
+            <!-- Tabs -->
+            <div class="tabs is-centered is-boxed">
+                <ul>
+                    <li class="is-active" data-tab="tracks">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-music"></i></span>
+                            <span>Tracks</span>
+                        </a>
+                    </li>
+                    <li data-tab="artists">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-users"></i></span>
+                            <span>Artists</span>
+                        </a>
+                    </li>
+                    <li data-tab="albums">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-compact-disc"></i></span>
+                            <span>Albums</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Tracks Table -->
+            <div class="box content-box" id="tracks-content">
+                <h2 class="title is-4">Tracks</h2>
+                <p class="subtitle is-6">Browse through our music collection</p>
+
+                <div class="table-container">
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>
+                                Name
+                                <span class="icon sort-icon" data-sort="name">
+                                    <i class="fas fa-sort"></i>
+                                </span>
+                            </th>
+                            <th>
+                                Artist
+                                <span class="icon sort-icon" data-sort="artist">
+                                <i class="fas fa-sort"></i>
+                            </span>
+                            </th>
+                            <th>
+                                Album
+                                <span class="icon sort-icon" data-sort="album">
+                                <i class="fas fa-sort"></i>
+                            </span>
+                            </th>
+                            <th>
+                                Duration
+                                <span class="icon sort-icon" data-sort="duration">
+                                    <i class="fas fa-sort"></i>
+                                </span>
+                            </th>
+                            <th>
+                                Price
+                                <span class="icon sort-icon" data-sort="price">
+                                    <i class="fas fa-sort"></i>
+                                </span>
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tracks-body">
+                        <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                    <a class="pagination-previous">Previous</a>
+                    <a class="pagination-next">Next</a>
+                    <ul class="pagination-list">
+                        <!-- Populated by JavaScript -->
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Stats Tiles -->
+            <div class="box">
+                <div class="tile is-ancestor">
+                    <div class="tile is-parent">
+                        <article class="tile is-child">
+                            <p class="heading">
+                                <span class="icon">
+                                    <i class="fas fa-clock"></i>
+                                </span>
+                                Total Duration
+                            </p>
+                            <p class="title">347 hours</p>
+                        </article>
+                    </div>
+                    <div class="tile is-parent">
+                        <article class="tile is-child">
+                            <p class="heading">
+                                <span class="icon">
+                                    <i class="fas fa-music"></i>
+                                </span>
+                                Total Tracks
+                            </p>
+                            <p class="title" id="totalItems">0</p>
+                        </article>
+                    </div>
+                    <div class="tile is-parent">
+                        <article class="tile is-child">
+                            <p class="heading">
+                                <span class="icon">
+                                    <i class="fas fa-tags"></i>
+                                </span>
+                                Genres
+                            </p>
+                            <p class="title">25</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for track details -->
+    <div class="modal" id="trackModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Track Details</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <!-- Populated by JavaScript -->
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success">Add to Playlist</button>
+                <button class="button">Close</button>
+            </footer>
+        </div>
+    </div>
+
+{% endblock application %}

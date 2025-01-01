@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Music Application</title>
+    <!-- Link to your external stylesheet -->
+    <link rel="stylesheet" href="/static/css/bulma/css/bulma.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://kit.fontawesome.com/336253754b.js" crossorigin="anonymous"></script>
+    <script src="/static/js/application.js"></script>
+</head>
+<body>
+    <div id="application" class="content-wrapper">
+        <!-- Header -->
+        <div class="hero brand-color">
+            <div class="hero-body">
+                <p class="title">Let There Be Music!</p>
+                <p class="subtitle">Just a little application to snoop around some music</p>
+            </div>
+        </div>
+
+        <nav class="navbar brand-color" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/application">
+                    <i class="fa-solid fa-headphones"></i>
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="/application">
+                        Home
+                    </a>
+                    <a class="navbar-item">
+                        About
+                    </a>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="level">
+                            <p class="control level-item has-icons-left">
+                                <input
+                                    class="input"
+                                    type="text"
+                                    placeholder="Search music..."
+                                    id="searchInput"
+                                >
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </p>
+                            <div class="control level-item">
+                                <div class="select is-fullwidth">
+                                    <select id="filterField">
+                                        <option value="all">All Fields</option>
+                                        <option value="name">Name</option>
+                                        <option value="artist">Artist</option>
+                                        <option value="album">Album</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control level-item">
+                                <div class="select is-fullwidth">
+                                    <select id="itemsPerPage">
+                                        <option value="5">5 per page</option>
+                                        <option value="10" selected>10 per page</option>
+                                        <option value="20">20 per page</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        {% block application %}{% endblock application %}
+    </div>
+
+    <!-- Sticky Footer -->
+    <footer class="footer brand-color custom-footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Let There Be Music!</strong> by <a href="https://happycanvasandcode.com">Happy Canvas And Code</a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

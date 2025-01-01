@@ -1,0 +1,34 @@
+/* The custom style sheet for the application */
+
+.brand-color {
+    background-color: #d3e8f5;
+}
+.sort-icon {
+    cursor: pointer;
+}
+.sort-icon.active {
+    color: #485fc7;
+}
+.pagination-ellipsis {
+    pointer-events: none;
+}
+html {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 0;
+}
+.content-wrapper {
+    flex: 1;
+}
+footer {
+    padding: .1rem .15rem;
+}
+.custom-footer {
+    padding: .2rem;
+}

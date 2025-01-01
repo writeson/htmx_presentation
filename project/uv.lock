@@ -108,7 +108,7 @@ name = "click"
 version = "8.1.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b9/2e/0090cbf739cee7d23781ad4b89a9894a41538e4fcf4c31dcdd705b78eb8b/click-8.1.8.tar.gz", hash = "sha256:ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d16096a", size = 226593 }
 wheels = [
@@ -179,6 +179,7 @@ dependencies = [
     { name = "aiosqlite" },
     { name = "fastapi" },
     { name = "greenlet" },
+    { name = "jinja-partials" },
     { name = "jinja2" },
     { name = "sqlmodel" },
     { name = "uvicorn" },
@@ -195,7 +196,8 @@ requires-dist = [
     { name = "aiosqlite", specifier = "==0.20.0" },
     { name = "fastapi", specifier = "==0.115.2" },
     { name = "greenlet", specifier = "==3.1.1" },
-    { name = "jinja2", specifier = ">=3.1.5" },
+    { name = "jinja-partials", specifier = ">=0.2.1" },
+    { name = "jinja2", specifier = "==3.1.5" },
     { name = "sqlmodel", specifier = "==0.0.22" },
     { name = "uvicorn", specifier = "==0.32.0" },
 ]
@@ -270,6 +272,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f1/70/7703c29685631f5a7590aa73f1f1d3fa9a380e654b86af429e0934a32f7d/idna-3.10.tar.gz", hash = "sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9", size = 190490 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/76/c6/c88e154df9c4e1a2a66ccf0005a88dfb2650c1dffb6f5ce603dfbd452ce3/idna-3.10-py3-none-any.whl", hash = "sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3", size = 70442 },
+]
+
+[[package]]
+name = "jinja-partials"
+version = "0.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jinja2" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/4d/22/f3343b4b58c5001f6deb6b7a9be061e58239822062c175f51d891b0919e0/jinja_partials-0.2.1.tar.gz", hash = "sha256:5b32cc035ee93f372ddfcecf96c4837450d8561d0e2ff26c89dc0d0bd071128b", size = 2970930 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a7/f3/74e62cdc6b91724826bfcd8cc52de08392fc3973e95d0e1ba11966f82873/jinja_partials-0.2.1-py3-none-any.whl", hash = "sha256:c23a5217251350ef75b8368ce59fa7e43463cd61a11fde1b2c869b2011abb953", size = 4654 },
 ]
 
 [[package]]

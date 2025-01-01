@@ -38,6 +38,7 @@ from app.models import invoice_items
 from app.models import customers
 from app.models import employees
 from app.endpoints.routes import build_routes
+
 # from app.endpoints.search import router as search_router
 from app.endpoints.application import router as application_router
 from logger_config import setup_logging
@@ -104,10 +105,10 @@ def app_factory():
 
     # add the search route
     # fastapi_app.include_router(search_router, prefix="/api/v1")
-    
+
     # add the application route
     fastapi_app.include_router(application_router, prefix="/application")
-    
+
     return fastapi_app
 
 

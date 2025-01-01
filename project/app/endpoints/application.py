@@ -1,7 +1,6 @@
 from pathlib import Path as PathlibPath
-from typing import List, Tuple, TypeVar
 
-from fastapi import APIRouter, Depends, Path, status, HTTPException, Request
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,7 +8,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.endpoints import crud
 from app.models.artists import Artist
-
 
 
 # initialize the Jinja2 templates
@@ -32,7 +30,7 @@ async def home(
 ):
     return templates.TemplateResponse(
         request=request,
-        name="home.html",
+        name="application.html",
     )
 
 
@@ -50,11 +48,11 @@ async def get_artists(
             limit=limit,
             model_class=Artist,
         )
-        
+
     return templates.TemplateResponse(
         name="partials/artists.html",
         context={
             "request": request,
             "artists": artists,
-        }
+        },
     )
