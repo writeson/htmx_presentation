@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
+import jinja_partials
 
 from app.database import get_db
 from app.endpoints import crud
@@ -13,6 +14,7 @@ from app.models.artists import Artist
 # initialize the Jinja2 templates
 templates_dir = PathlibPath(__file__).resolve().parent.parent / "templates"
 templates = Jinja2Templates(directory=templates_dir)
+jinja_partials.register_starlette_extensions(templates)
 
 
 # create a router for the model
@@ -31,6 +33,10 @@ async def home(
     return templates.TemplateResponse(
         request=request,
         name="application.html",
+        context={
+            "request": request,
+            "partial_template": "albums.html",
+        },
     )
 
 

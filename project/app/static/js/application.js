@@ -61,9 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
         paginatedData.forEach(track => {
             const row = document.createElement('tr');
             row.innerHTML = `
-        <td>${track.name}</td>
-        <td>${track.artist}</td>
         <td>${track.album}</td>
+        <td>${track.artist}</td>
         <td>${track.duration}</td>
         <td>${track.price}</td>
         <td>
