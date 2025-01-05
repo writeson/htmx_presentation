@@ -10,32 +10,36 @@
                 <th>
                     Album
                     <span class="icon sort-icon" data-sort="album">
-                                    <i class="fas fa-sort"></i>
-                                </span>
+                        <i class="fas fa-sort"></i>
+                    </span>
                 </th>
                 <th>
                     Artist
                     <span class="icon sort-icon" data-sort="artist">
-                                    <i class="fas fa-sort"></i>
-                                </span>
+                        <i class="fas fa-sort"></i>
+                    </span>
                 </th>
                 <th>
                     Duration
                     <span class="icon sort-icon" data-sort="duration">
-                                    <i class="fas fa-sort"></i>
-                                </span>
+                        <i class="fas fa-sort"></i>
+                    </span>
                 </th>
                 <th>
                     Price
                     <span class="icon sort-icon" data-sort="price">
-                                    <i class="fas fa-sort"></i>
-                                </span>
+                        <i class="fas fa-sort"></i>
+                    </span>
                 </th>
                 <th>Actions</th>
             </tr>
             </thead>
-            <tbody id="tracks-body">
-            <!-- Populated by JavaScript -->
+            <!-- Populated by htmx -->
+            <tbody
+                id="table-content"
+                hx-get="/application/albums"
+                hx-trigger="load"
+            >
             </tbody>
         </table>
     </div>

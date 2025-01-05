@@ -23,7 +23,14 @@
 
         <nav class="navbar brand-color" style="background-color: #c7e3f0;" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <a class="navbar-item" href="/application">
+                <a
+                    hx-get="/application"
+                    hx-vals='{"tab": "artists"}'
+                    hx-trigger="click"
+                    hx-target="#container"
+                    class="navbar-item"
+                    href="/application"
+                >
                     <i class="fa-solid fa-headphones"></i>
                 </a>
 
@@ -37,10 +44,21 @@
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-start">
-                    <a class="navbar-item" href="/application">
+                    <a
+                        hx-get="/application"
+                        hx-vals='{"tab": "artists"}'
+                        hx-trigger="click"
+                        hx-target="#container"
+                        class="navbar-item"
+                    >
                         Home
                     </a>
-                    <a class="navbar-item">
+                    <a
+                        hx-get="/application/about"
+                        hx-trigger="click"
+                        hx-target="#container"
+                        class="navbar-item"
+                    >
                         About
                     </a>
                 </div>
@@ -70,7 +88,7 @@
                             </div>
                             <div class="control level-item">
                                 <div class="select is-fullwidth">
-                                    <select id="itemsPerPage">
+                                    <select id="itemsPerPage" name="items_per_page">
                                         <option value="5">5 per page</option>
                                         <option value="10" selected>10 per page</option>
                                         <option value="20">20 per page</option>
@@ -82,17 +100,144 @@
                 </div>
             </div>
         </nav>
-        {% block application %}{% endblock application %}
-    </div>
+        <!-- main content section of the application -->
+        <section class="section">
+            <div id="container" class="container">
+                <!-- Application Navigation Tabs -->
+                <div class="tabs is-centered is-boxed">
+                    <ul>
+                        <li
+                                hx-get="/application/artists"
+                                hx-trigger="click"
+                                hx-target="#table-content"
+                                class="is-active"
+                                data-tab="artists"
+                        >
+                            <a>
+                                <span class="icon"><i class="fas fa-microphone"></i></span>
+                                <span>Artists</span>
+                            </a>
+                        </li>
+                        <li
+                                hx-get="/application/albums"
+                                hx-trigger="click"
+                                hx-target="#table-content"
+                                class=""
+                                data-tab="albums"
+                        >
+                            <a>
+                                <span class="icon"><i class="fas fa-compact-disc"></i></span>
+                                <span>Albums</span>
+                            </a>
+                        </li>
+                        <li
+                                hx-get="/application/playlists"
+                                hx-trigger="click"
+                                hx-target="#table-content"
+                                class=""
+                                data-tab="playlists"
+                        >
+                            <a>
+                                <span class="icon"><i class="fas fa-list"></i></span>
+                                <span>Playlists</span>
+                            </a>
+                        </li>
+                        <li
+                                hx-get="/application/customers"
+                                hx-trigger="click"
+                                hx-target="#table-content"
+                                class=""
+                                data-tab="customers">
+                            <a>
+                                <span class="icon"><i class="fas fa-user"></i></span>
+                                <span>Customers</span>
+                            </a>
+                        </li>
+                        <li
+                                hx-get="/application/employees"
+                                hx-trigger="click"
+                                hx-target="#table-content"
+                                class=""
+                                data-tab="employees"
+                        >
+                            <a>
+                                <span class="icon"><i class="fas fa-user-tie"></i></span>
+                                <span>Employees</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
+                {% include partial_template %}
+
+                <!-- Stats Tiles -->
+                <div class="box">
+                    <div class="tile is-ancestor">
+                        <div class="tile is-parent">
+                            <article class="tile is-child">
+                                <p class="heading">
+                                <span class="icon">
+                                    <i class="fas fa-clock"></i>
+                                </span>
+                                    Total Duration
+                                </p>
+                                <p class="title">347 hours</p>
+                            </article>
+                        </div>
+                        <div class="tile is-parent">
+                            <article class="tile is-child">
+                                <p class="heading">
+                                <span class="icon">
+                                    <i class="fas fa-music"></i>
+                                </span>
+                                    Total Tracks
+                                </p>
+                                <p class="title" id="totalItems">0</p>
+                            </article>
+                        </div>
+                        <div class="tile is-parent">
+                            <article class="tile is-child">
+                                <p class="heading">
+                                <span class="icon">
+                                    <i class="fas fa-tags"></i>
+                                </span>
+                                    Genres
+                                </p>
+                                <p class="title">25</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal for track details -->
+        <div class="modal" id="trackModal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Track Details</p>
+                    <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <!-- Populated by JavaScript -->
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-success">Add to Playlist</button>
+                    <button class="button">Close</button>
+                </footer>
+            </div>
+        </div>
+    </div>
     <!-- Sticky Footer -->
     <footer class="footer brand-color custom-footer">
         <div class="content has-text-centered">
             <p>
-                <strong>Let There Be Music!</strong> by <a href="https://happycanvasandcode.com">Happy Canvas And Code</a>
+                <strong>Let There Be Music!</strong>
+                &nbsp;&copy; 2024&nbsp;
+                by <a href="https://happycanvasandcode.com">Happy Canvas And Code</a>
             </p>
         </div>
     </footer>
-
 </body>
 </html>

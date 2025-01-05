@@ -1,0 +1,85 @@
+<!-- Content Tables -->
+<div class="box content-box" id="music-content">
+    <h2 class="title is-4">Artists</h2>
+    <p class="subtitle is-6">Browse through our music collection</p>
+
+    <div class="table-container">
+        <table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+            <tr>
+                <th style="width: 60%;">
+                    Artist
+                    <span class="icon sort-icon" data-sort="artist">
+                        <i
+                            hx-get="/application/artists"
+                            hx-trigger="click"
+                            hx-vals='js:{
+                                "class": Array.from(event.target.classList),
+                                "sort": event.target.dataset.sort
+                            }'
+                            hx-include="#itemsPerPage"
+                            hx-target="#table-content"
+                            class="fas fa-sort"
+                            data-sort="artist"
+                        >
+                        </i>
+                    </span>
+                </th>
+                <th style="width: 15%;">
+                    Album Count
+                    <span class="icon sort-icon" data-sort="album_count">
+                        <i
+                            hx-get="/application/artists"
+                            hx-trigger="click"
+                            hx-vals='js:{
+                                "class": Array.from(event.target.classList),
+                                "sort": event.target.dataset.sort
+                            }'
+                            hx-include="#itemsPerPage"
+                            hx-target="#table-content"
+                            class="fas fa-sort"
+                            data-sort="album"
+                        >
+                        </i>
+                    </span>
+                </th>
+                <th style="width: 15%;">
+                    Track Count
+                    <span class="icon sort-icon" data-sort="track_count">
+                        <i
+                            hx-get="/application/artists"
+                            hx-trigger="click"
+                            hx-vals='js:{
+                                "class": Array.from(event.target.classList),
+                                "sort": event.target.dataset.sort
+                            }'
+                            hx-include="#itemsPerPage"
+                            hx-target="#table-content"
+                            class="fas fa-sort"
+                            data-sort="track"
+                        >
+                        </i>
+                    </span>
+                </th>
+                <th style="width: 10%;">Actions</th>
+            </tr>
+            </thead>
+            <!-- Populated by htmx -->
+            <tbody
+                id="table-content"
+                hx-get="/application/artists"
+                hx-trigger="load"
+            >
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <a class="pagination-previous">Previous</a>
+        <a class="pagination-next">Next</a>
+        <ul class="pagination-list">
+            <!-- Populated by JavaScript -->
+        </ul>
+    </nav>
+</div>

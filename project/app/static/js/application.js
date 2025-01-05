@@ -45,40 +45,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Update table function
-    function updateTable() {
-        const filteredData = filterData(tracks);
-        const sortedData = state.sortField
-            ? sortData(filteredData, state.sortField, state.sortDirection)
-            : filteredData;
-
-        const start = (state.currentPage - 1) * state.itemsPerPage;
-        const paginatedData = sortedData.slice(start, start + state.itemsPerPage);
-
-        const tbody = document.getElementById('tracks-body');
-        tbody.innerHTML = '';
-
-        paginatedData.forEach(track => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-        <td>${track.album}</td>
-        <td>${track.artist}</td>
-        <td>${track.duration}</td>
-        <td>${track.price}</td>
-        <td>
-          <button class="button is-small is-info view-details" data-id="${track.id}">
-            <span class="icon is-small">
-              <i class="fas fa-info-circle"></i>
-            </span>
-          </button>
-        </td>
-      `;
-            tbody.appendChild(row);
-        });
-
-        updatePagination(filteredData.length);
-        document.getElementById('totalItems').textContent = filteredData.length;
-    }
+    // // Update table function
+    // function updateTable() {
+    //     const filteredData = filterData(tracks);
+    //     const sortedData = state.sortField
+    //         ? sortData(filteredData, state.sortField, state.sortDirection)
+    //         : filteredData;
+    //
+    //     const start = (state.currentPage - 1) * state.itemsPerPage;
+    //     const paginatedData = sortedData.slice(start, start + state.itemsPerPage);
+    //
+    //     const tbody = document.getElementById('tracks-body');
+    //     tbody.innerHTML = '';
+    //
+    //     paginatedData.forEach(track => {
+    //         const row = document.createElement('tr');
+    //         row.innerHTML = `
+    //     <td>${track.album}</td>
+    //     <td>${track.artist}</td>
+    //     <td>${track.duration}</td>
+    //     <td>${track.price}</td>
+    //     <td>
+    //       <button class="button is-small is-info view-details" data-id="${track.id}">
+    //         <span class="icon is-small">
+    //           <i class="fas fa-info-circle"></i>
+    //         </span>
+    //       </button>
+    //     </td>
+    //   `;
+    //         tbody.appendChild(row);
+    //     });
+    //
+    //     updatePagination(filteredData.length);
+    //     document.getElementById('totalItems').textContent = filteredData.length;
+    // }
 
     // Update pagination controls
     function updatePagination(totalItems) {
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.querySelector('i').className = `fas fa-sort-${state.sortDirection === 'asc' ? 'up' : 'down'}`;
 
             state.currentPage = 1;
-            updateTable();
+            // updateTable();
         });
     });
 
@@ -203,5 +203,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Initial load
-    updateTable();
+    // updateTable();
 });

@@ -6,35 +6,63 @@
             id="container" 
             class="container"
         >
-
             <!-- Tabs -->
             <div class="tabs is-centered is-boxed">
                 <ul>
-                    <li class="is-active" data-tab="albums">
-                        <a>
-                            <span class="icon"><i class="fas fa-compact-disc"></i></span>
-                            <span>Albums</span>
-                        </a>
-                    </li>
-                    <li data-tab="artists">
+                    <li
+                        hx-get="/application/artists"
+                        hx-trigger="click"
+                        hx-target="#table-content"
+                        class="is-active"
+                        data-tab="artists"
+                    >
                         <a>
                             <span class="icon"><i class="fas fa-microphone"></i></span>
                             <span>Artists</span>
                         </a>
                     </li>
-                    <li data-tab="playlists">
+                    <li
+                        hx-get="/application/albums"
+                        hx-trigger="click"
+                        hx-target="#table-content"
+                        class=""
+                        data-tab="albums"
+                    >
+                        <a>
+                            <span class="icon"><i class="fas fa-compact-disc"></i></span>
+                            <span>Albums</span>
+                        </a>
+                    </li>
+                    <li
+                        hx-get="/application/playlists"
+                        hx-trigger="click"
+                        hx-target="#table-content"
+                        class=""
+                        data-tab="playlists"
+                    >
                         <a>
                             <span class="icon"><i class="fas fa-list"></i></span>
                             <span>Playlists</span>
                         </a>
                     </li>
-                    <li data-tab="tracks">
+                    <li
+                        hx-get="/application/customers"
+                        hx-trigger="click"
+                        hx-target="#table-content"
+                        class=""
+                        data-tab="customers">
                         <a>
                             <span class="icon"><i class="fas fa-user"></i></span>
                             <span>Customers</span>
                         </a>
                     </li>
-                    <li data-tab="tracks">
+                    <li
+                        hx-get="/application/employees"
+                        hx-trigger="click"
+                        hx-target="#table-content"
+                        class=""
+                        data-tab="employees"
+                    >
                         <a>
                             <span class="icon"><i class="fas fa-user-tie"></i></span>
                             <span>Employees</span>
@@ -44,57 +72,6 @@
             </div>
 
             {% include partial_template %}
-{#            <!-- Albums Table -->#}
-{#            <div class="box content-box" id="tracks-content">#}
-{#                <h2 class="title is-4">Albums</h2>#}
-{#                <p class="subtitle is-6">Browse through our music collection</p>#}
-{##}
-{#                <div class="table-container">#}
-{#                    <table class="table is-fullwidth is-striped is-hoverable">#}
-{#                        <thead>#}
-{#                        <tr>#}
-{#                            <th>#}
-{#                                Album#}
-{#                                <span class="icon sort-icon" data-sort="album">#}
-{#                                    <i class="fas fa-sort"></i>#}
-{#                                </span>#}
-{#                            </th>#}
-{#                            <th>#}
-{#                                Artist#}
-{#                                <span class="icon sort-icon" data-sort="artist">#}
-{#                                    <i class="fas fa-sort"></i>#}
-{#                                </span>#}
-{#                            </th>#}
-{#                            <th>#}
-{#                                Duration#}
-{#                                <span class="icon sort-icon" data-sort="duration">#}
-{#                                    <i class="fas fa-sort"></i>#}
-{#                                </span>#}
-{#                            </th>#}
-{#                            <th>#}
-{#                                Price#}
-{#                                <span class="icon sort-icon" data-sort="price">#}
-{#                                    <i class="fas fa-sort"></i>#}
-{#                                </span>#}
-{#                            </th>#}
-{#                            <th>Actions</th>#}
-{#                        </tr>#}
-{#                        </thead>#}
-{#                        <tbody id="tracks-body">#}
-{#                        <!-- Populated by JavaScript -->#}
-{#                        </tbody>#}
-{#                    </table>#}
-{#                </div>#}
-{##}
-{#                <!-- Pagination -->#}
-{#                <nav class="pagination is-centered" role="navigation" aria-label="pagination">#}
-{#                    <a class="pagination-previous">Previous</a>#}
-{#                    <a class="pagination-next">Next</a>#}
-{#                    <ul class="pagination-list">#}
-{#                        <!-- Populated by JavaScript -->#}
-{#                    </ul>#}
-{#                </nav>#}
-{#            </div>#}
 
             <!-- Stats Tiles -->
             <div class="box">
