@@ -18,6 +18,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -105,6 +106,11 @@ def app_factory():
 
     # add the search route
     # fastapi_app.include_router(search_router, prefix="/api/v1")
+
+    # Route for favicon.ico
+    @fastapi_app.get("/favicon.ico", include_in_schema=False)
+    async def favicon():
+        return FileResponse("static/images/favicon.ico", media_type="image/x-icon")
 
     # add the application route
     fastapi_app.include_router(application_router, prefix="/application")
