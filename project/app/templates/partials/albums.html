@@ -1,0 +1,23 @@
+{% for artist in artists %}
+    <tr>
+        <td>
+            {{ artist["name"] }}
+        </td>
+        <td>
+            {{ artist["album_count"] }}
+        </td>
+        <td>
+            {{ artist["track_count"] }}
+        </td>
+        <td>
+            <button 
+                class="button is-small is-info view-details" 
+                data-id="{{ artist['id'] }}"
+            >
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+{% endfor %}

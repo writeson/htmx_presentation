@@ -10,25 +10,145 @@
                 <th>
                     Album
                     <span class="icon sort-icon" data-sort="album">
-                        <i class="fas fa-sort"></i>
+                        <i
+                                hx-get="/application/artists"
+                                hx-trigger="click"
+                                hx-vals='js:{
+                                "sort": event.target.dataset.sort,
+                                "direction": event.target.dataset.direction
+                            }'
+                                hx-include="#itemsPerPage"
+                                hx-target="#table-content"
+                                class="fas fa-sort"
+                                data-sort="artist"
+                                data-direction="desc"
+                                _="on click
+                                 -- Reset all <i> elements' classes to fa-sort
+                                 set icons to <i/> in closest <tr/>
+                                 remove .fa-sort-down .fa-sort-up from icons
+                                 add .fa-sort to icons
+                                   
+                                 -- set clicked icon's direction and class
+                                 if @data-direction == 'asc'
+                                    set @data-direction to 'desc'
+                                    remove .fa-sort-up .fa-sort from me
+                                    add .fa-sort-down to me                                    
+                                 else
+                                    set @data-direction to 'asc'
+                                    remove .fa-sort-down .fa-sort from me
+                                    add .fa-sort-up to me
+                                 end
+                            "
+                        >
+                        </i>
                     </span>
                 </th>
                 <th>
                     Artist
                     <span class="icon sort-icon" data-sort="artist">
-                        <i class="fas fa-sort"></i>
+                        <i
+                                hx-get="/application/artists"
+                                hx-trigger="click"
+                                hx-vals='js:{
+                                "sort": event.target.dataset.sort,
+                                "direction": event.target.dataset.direction
+                            }'
+                                hx-include="#itemsPerPage"
+                                hx-target="#table-content"
+                                class="fas fa-sort"
+                                data-sort="artist"
+                                data-direction="desc"
+                                _="on click
+                                 -- Reset all <i> elements' classes to fa-sort
+                                 set icons to <i/> in closest <tr/>
+                                 remove .fa-sort-down .fa-sort-up from icons
+                                 add .fa-sort to icons
+                                   
+                                 -- set clicked icon's direction and class
+                                 if @data-direction == 'asc'
+                                    set @data-direction to 'desc'
+                                    remove .fa-sort-up .fa-sort from me
+                                    add .fa-sort-down to me                                    
+                                 else
+                                    set @data-direction to 'asc'
+                                    remove .fa-sort-down .fa-sort from me
+                                    add .fa-sort-up to me
+                                 end
+                            "
+                        >
+                        </i>
                     </span>
                 </th>
                 <th>
                     Duration
                     <span class="icon sort-icon" data-sort="duration">
-                        <i class="fas fa-sort"></i>
+                        <i
+                                hx-get="/application/artists"
+                                hx-trigger="click"
+                                hx-vals='js:{
+                                "sort": event.target.dataset.sort,
+                                "direction": event.target.dataset.direction
+                            }'
+                                hx-include="#itemsPerPage"
+                                hx-target="#table-content"
+                                class="fas fa-sort"
+                                data-sort="artist"
+                                data-direction="desc"
+                                _="on click
+                                 -- Reset all <i> elements' classes to fa-sort
+                                 set icons to <i/> in closest <tr/>
+                                 remove .fa-sort-down .fa-sort-up from icons
+                                 add .fa-sort to icons
+                                   
+                                 -- set clicked icon's direction and class
+                                 if @data-direction == 'asc'
+                                    set @data-direction to 'desc'
+                                    remove .fa-sort-up .fa-sort from me
+                                    add .fa-sort-down to me                                    
+                                 else
+                                    set @data-direction to 'asc'
+                                    remove .fa-sort-down .fa-sort from me
+                                    add .fa-sort-up to me
+                                 end
+                            "
+                        >
+                        </i>
                     </span>
                 </th>
                 <th>
                     Price
                     <span class="icon sort-icon" data-sort="price">
-                        <i class="fas fa-sort"></i>
+                        <i
+                                hx-get="/application/artists"
+                                hx-trigger="click"
+                                hx-vals='js:{
+                                "sort": event.target.dataset.sort,
+                                "direction": event.target.dataset.direction
+                            }'
+                                hx-include="#itemsPerPage"
+                                hx-target="#table-content"
+                                class="fas fa-sort"
+                                data-sort="artist"
+                                data-direction="desc"
+                                _="on click
+                                 -- Reset all <i> elements' classes to fa-sort
+                                 set icons to <i/> in closest <tr/>
+                                 remove .fa-sort-down .fa-sort-up from icons
+                                 add .fa-sort to icons
+                                   
+                                 -- set clicked icon's direction and class
+                                 if @data-direction == 'asc'
+                                    set @data-direction to 'desc'
+                                    remove .fa-sort-up .fa-sort from me
+                                    add .fa-sort-down to me                                    
+                                 else
+                                    set @data-direction to 'asc'
+                                    remove .fa-sort-down .fa-sort from me
+                                    add .fa-sort-up to me
+                                 end
+                            "
+                        >
+                        </i>
                     </span>
                 </th>
                 <th>Actions</th>

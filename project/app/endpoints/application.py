@@ -1,5 +1,3 @@
-import re
-from typing import List
 from pathlib import Path as PathlibPath
 
 from fastapi import APIRouter, Depends, Request, Query
@@ -38,6 +36,20 @@ router = APIRouter(
 )
 
 
+@router.get("/test", response_class=HTMLResponse)
+async def test(
+    request: Request,
+):
+    request.query_params.get("tab", "artists")
+    return templates.TemplateResponse(
+        request=request,
+        name="test.html",
+        context={
+            "request": request,
+        },
+    )
+
+
 @router.get("/", response_class=HTMLResponse)
 async def home(
     request: Request,
@@ -53,12 +65,26 @@ async def home(
     )
 
 
+@router.get("/template/{template_name}", response_class=HTMLResponse)
+async def get_template(
+    request: Request,
+    template_name: str,
+):
+    return templates.TemplateResponse(
+        request=request,
+        name=f"{template_name}.html",
+        context={
+            "request": request,
+        },
+    )
+
+
 @router.get("/artists", response_class=HTMLResponse)
 async def get_artists(
     request: Request,
     db: AsyncSession = Depends(get_db),
-    class_: List[str] = Query(None, alias="class"),
     sort: str = Query(None, alias="sort"),
+    direction: str = Query(None, alias="direction"),
     offset: int = 0,
     items_per_page: int = Query(10, alias="items_per_page"),
 ):
@@ -77,7 +103,7 @@ async def get_artists(
             .limit(limit)
             .group_by(Artist.name)
         )
-        query = query_order_by(query=query, class_=class_, sort=sort)
+        query = query_order_by(query=query, sort=sort, direction=direction)
         results = await session.execute(query)
 
     # Convert each row to a dictionary
@@ -139,22 +165,17 @@ async def get_about(
     )
 
 
-def query_order_by(query: Select, class_: List[str], sort: str) -> Select:
+def query_order_by(query: Select, sort: str, direction: str) -> Select:
     """
     Modifies the passed in query to add an order_by clause with
     a direction determined by the class_ list
     
     :param query: the Select query to modify
-    :param class_: the list of classes passed to the handler
     :param sort: the data column to sort by
+    :param direction: the sorting direction (asc, desc)
     :return: modified Select query
     """ ""
-    sort_dir = "asc"
-    if class_ is not None:
-        pattern = r"^fa-sort(-\w+)?$"
-        matching_classes = [cls for cls in class_ if re.match(pattern, cls)]
-        sort_dir = "asc" if "fa-sort-up" in matching_classes else "desc"
-    sort_func = desc if sort_dir == "desc" else asc
+    sort_func = desc if direction == "desc" else asc
 
     if sort == "artist":
         query = query.order_by(sort_func(Artist.name))

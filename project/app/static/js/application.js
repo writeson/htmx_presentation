@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     // Mock data
     let tracks = Array.from({length: 50}, (_, i) => ({
@@ -45,133 +46,133 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // // Update table function
-    // function updateTable() {
-    //     const filteredData = filterData(tracks);
-    //     const sortedData = state.sortField
-    //         ? sortData(filteredData, state.sortField, state.sortDirection)
-    //         : filteredData;
-    //
-    //     const start = (state.currentPage - 1) * state.itemsPerPage;
-    //     const paginatedData = sortedData.slice(start, start + state.itemsPerPage);
-    //
-    //     const tbody = document.getElementById('tracks-body');
-    //     tbody.innerHTML = '';
-    //
-    //     paginatedData.forEach(track => {
-    //         const row = document.createElement('tr');
-    //         row.innerHTML = `
-    //     <td>${track.album}</td>
-    //     <td>${track.artist}</td>
-    //     <td>${track.duration}</td>
-    //     <td>${track.price}</td>
-    //     <td>
-    //       <button class="button is-small is-info view-details" data-id="${track.id}">
-    //         <span class="icon is-small">
-    //           <i class="fas fa-info-circle"></i>
-    //         </span>
-    //       </button>
-    //     </td>
-    //   `;
-    //         tbody.appendChild(row);
-    //     });
-    //
-    //     updatePagination(filteredData.length);
-    //     document.getElementById('totalItems').textContent = filteredData.length;
-    // }
+    // Update table function
+    function updateTable() {
+        const filteredData = filterData(tracks);
+        const sortedData = state.sortField
+            ? sortData(filteredData, state.sortField, state.sortDirection)
+            : filteredData;
 
-    // Update pagination controls
-    function updatePagination(totalItems) {
-        const totalPages = Math.ceil(totalItems / state.itemsPerPage);
-        const paginationList = document.querySelector('.pagination-list');
-        paginationList.innerHTML = '';
+        const start = (state.currentPage - 1) * state.itemsPerPage;
+        const paginatedData = sortedData.slice(start, start + state.itemsPerPage);
 
-        // Previous button
-        document.querySelector('.pagination-previous').disabled = state.currentPage === 1;
-        document.querySelector('.pagination-next').disabled = state.currentPage === totalPages;
+        const tbody = document.getElementById('tracks-body');
+        tbody.innerHTML = '';
 
-        // Generate page numbers
-        for (let i = 1; i <= totalPages; i++) {
-            if (i === 1 || i === totalPages || Math.abs(i - state.currentPage) <= 1) {
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.className = `pagination-link ${i === state.currentPage ? 'is-current' : ''}`;
-                a.setAttribute('aria-label', `Go to page ${i}`);
-                a.textContent = i;
-                a.onclick = () => {
-                    state.currentPage = i;
-                    updateTable();
-                };
-                li.appendChild(a);
-                paginationList.appendChild(li);
-            } else if (i === 2 || i === totalPages - 1) {
-                const li = document.createElement('li');
-                const span = document.createElement('span');
-                span.className = 'pagination-ellipsis';
-                span.innerHTML = '&hellip;';
-                li.appendChild(span);
-                paginationList.appendChild(li);
-            }
-        }
+        paginatedData.forEach(track => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+        <td>${track.album}</td>
+        <td>${track.artist}</td>
+        <td>${track.duration}</td>
+        <td>${track.price}</td>
+        <td>
+          <button class="button is-small is-info view-details" data-id="${track.id}">
+            <span class="icon is-small">
+              <i class="fas fa-info-circle"></i>
+            </span>
+          </button>
+        </td>
+      `;
+            tbody.appendChild(row);
+        });
+
+        updatePagination(filteredData.length);
+        document.getElementById('totalItems').textContent = filteredData.length;
     }
 
-    // Event Listeners
-    document.querySelectorAll('.sort-icon').forEach(icon => {
-        icon.addEventListener('click', () => {
-            const field = icon.dataset.sort;
-            if (state.sortField === field) {
-                state.sortDirection = state.sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                state.sortField = field;
-                state.sortDirection = 'asc';
-            }
+    // // Update pagination controls
+    // function updatePagination(totalItems) {
+    //     const totalPages = Math.ceil(totalItems / state.itemsPerPage);
+    //     const paginationList = document.querySelector('.pagination-list');
+    //     paginationList.innerHTML = '';
+    //
+    //     // Previous button
+    //     document.querySelector('.pagination-previous').disabled = state.currentPage === 1;
+    //     document.querySelector('.pagination-next').disabled = state.currentPage === totalPages;
+    //
+    //     // Generate page numbers
+    //     for (let i = 1; i <= totalPages; i++) {
+    //         if (i === 1 || i === totalPages || Math.abs(i - state.currentPage) <= 1) {
+    //             const li = document.createElement('li');
+    //             const a = document.createElement('a');
+    //             a.className = `pagination-link ${i === state.currentPage ? 'is-current' : ''}`;
+    //             a.setAttribute('aria-label', `Go to page ${i}`);
+    //             a.textContent = i;
+    //             a.onclick = () => {
+    //                 state.currentPage = i;
+    //                 updateTable();
+    //             };
+    //             li.appendChild(a);
+    //             paginationList.appendChild(li);
+    //         } else if (i === 2 || i === totalPages - 1) {
+    //             const li = document.createElement('li');
+    //             const span = document.createElement('span');
+    //             span.className = 'pagination-ellipsis';
+    //             span.innerHTML = '&hellip;';
+    //             li.appendChild(span);
+    //             paginationList.appendChild(li);
+    //         }
+    //     }
+    // }
+    //
+    // // Event Listeners
+    // document.querySelectorAll('.sort-icon').forEach(icon => {
+    //     icon.addEventListener('click', () => {
+    //         const field = icon.dataset.sort;
+    //         if (state.sortField === field) {
+    //             state.sortDirection = state.sortDirection === 'asc' ? 'desc' : 'asc';
+    //         } else {
+    //             state.sortField = field;
+    //             state.sortDirection = 'asc';
+    //         }
+    //
+    //         // Update sort icons
+    //         document.querySelectorAll('.sort-icon').forEach(i => {
+    //             i.querySelector('i').className = 'fas fa-sort';
+    //             i.classList.remove('active');
+    //         });
+    //
+    //         icon.classList.add('active');
+    //         icon.querySelector('i').className = `fas fa-sort-${state.sortDirection === 'asc' ? 'up' : 'down'}`;
+    //
+    //         state.currentPage = 1;
+    //         // updateTable();
+    //     });
+    // });
+    //
+    // document.getElementById('searchInput').addEventListener('input', (e) => {
+    //     state.filterText = e.target.value;
+    //     state.currentPage = 1;
+    //     updateTable();
+    // });
+    //
+    // document.getElementById('filterField').addEventListener('change', (e) => {
+    //     state.filterField = e.target.value;
+    //     state.currentPage = 1;
+    //     updateTable();
+    // });
 
-            // Update sort icons
-            document.querySelectorAll('.sort-icon').forEach(i => {
-                i.querySelector('i').className = 'fas fa-sort';
-                i.classList.remove('active');
-            });
+    // document.getElementById('itemsPerPage').addEventListener('change', (e) => {
+    //     state.itemsPerPage = parseInt(e.target.value);
+    //     state.currentPage = 1;
+    //     updateTable();
+    // });
 
-            icon.classList.add('active');
-            icon.querySelector('i').className = `fas fa-sort-${state.sortDirection === 'asc' ? 'up' : 'down'}`;
-
-            state.currentPage = 1;
-            // updateTable();
-        });
-    });
-
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        state.filterText = e.target.value;
-        state.currentPage = 1;
-        updateTable();
-    });
-
-    document.getElementById('filterField').addEventListener('change', (e) => {
-        state.filterField = e.target.value;
-        state.currentPage = 1;
-        updateTable();
-    });
-
-    document.getElementById('itemsPerPage').addEventListener('change', (e) => {
-        state.itemsPerPage = parseInt(e.target.value);
-        state.currentPage = 1;
-        updateTable();
-    });
-
-    document.querySelector('.pagination-previous').addEventListener('click', () => {
-        if (state.currentPage > 1) {
-            state.currentPage--;
-            updateTable();
-        }
-    });
-
-    document.querySelector('.pagination-next').addEventListener('click', () => {
-        const totalPages = Math.ceil(filterData(tracks).length / state.itemsPerPage);
-        if (state.currentPage < totalPages) {
-            state.currentPage++;
-            updateTable();
-        }
-    });
+    // document.querySelector('.pagination-previous').addEventListener('click', () => {
+    //     if (state.currentPage > 1) {
+    //         state.currentPage--;
+    //         updateTable();
+    //     }
+    // });
+    //
+    // document.querySelector('.pagination-next').addEventListener('click', () => {
+    //     const totalPages = Math.ceil(filterData(tracks).length / state.itemsPerPage);
+    //     if (state.currentPage < totalPages) {
+    //         state.currentPage++;
+    //         updateTable();
+    //     }
+    // });
 
     // Modal functionality
     document.addEventListener('click', (e) => {

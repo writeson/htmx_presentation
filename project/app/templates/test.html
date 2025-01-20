@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)http://127.0.0.1:8000/application/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Music Application</title>
+    <link rel="icon" type="image/x-icon" href="http://127.0.0.1:8000/favicon.ico">
+
+    <!-- Link to your external stylesheet -->
+    <link rel="stylesheet" href="/static/css/bulma/css/bulma.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://kit.fontawesome.com/336253754b.js" crossorigin="anonymous"></script>
+    <script src="/static/js/htmx.min.js"></script>
+    <script src="/static/js/hyperscript.min.js"></script>
+    <script src="/static/js/application.js"></script>
+<style>      .htmx-indicator{opacity:0}      .htmx-request .htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}      .htmx-request.htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}      </style></head>
+<body hx-ext="hyperscript" data-new-gr-c-s-check-loaded="14.1216.0" data-gr-ext-installed="">
+    <div id="application" class="content-wrapper">
+        <!-- Header -->
+        <div class="hero brand-color">
+            <div class="hero-body">
+                <p class="title">Let There Be Music!</p>
+                <p class="subtitle">Just a little application to snoop around some music</p>
+            </div>
+        </div>
+
+        <nav class="navbar brand-color" style="background-color: #c7e3f0;" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a hx-get="/application" hx-vals="{&quot;tab&quot;: &quot;artists&quot;}" hx-trigger="click" hx-target="#container" class="navbar-item" href="http://127.0.0.1:8000/application">
+                    <i class="fa-solid fa-headphones" aria-hidden="true"></i>
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a hx-get="/application" hx-vals="{&quot;tab&quot;: &quot;artists&quot;}" hx-trigger="click" hx-target="#container" class="navbar-item">
+                        Home
+                    </a>
+                    <a hx-get="/application/about" hx-trigger="click" hx-target="#container" class="navbar-item">
+                        About
+                    </a>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="level">
+                            <p class="control level-item has-icons-left">
+                                <input class="input" type="text" placeholder="Search music..." id="searchInput">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-search" aria-hidden="true"></i>
+                                </span>
+                            </p>
+                            <div class="control level-item">
+                                <div class="select is-fullwidth">
+                                    <select id="filterField">
+                                        <option value="all">All Fields</option>
+                                        <option value="name">Name</option>
+                                        <option value="artist">Artist</option>
+                                        <option value="album">Album</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control level-item">
+                                <div class="select is-fullwidth">
+                                    <select
+                                        id="itemsPerPage"
+                                        name="items_per_page"
+                                        _="on change
+                                           log 'change detected'
+                                           log 'targeting:' then log document.querySelector('th span.icon.sort-icon.active i')                                            
+                                           send click  to document.querySelector('th span.icon.sort-icon.active i')"
+                                    >
+                                        <option value="5">5 per page</option>
+                                        <option value="10" selected="">10 per page</option>
+                                        <option value="20">20 per page</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- main content section of the application -->
+        <section class="section">
+            <div id="container" class="container">
+                <!-- Application Navigation Tabs -->
+                <div class="tabs is-centered is-boxed">
+                    <ul>
+                        <li hx-get="/application/artists" hx-trigger="click" hx-target="#table-content" class="is-active" data-tab="artists">
+                            <a>
+                                <span class="icon"><i class="fas fa-microphone" aria-hidden="true"></i></span>
+                                <span>Artists</span>
+                            </a>
+                        </li>
+                        <li hx-get="/application/albums" hx-trigger="click" hx-target="#table-content" class="" data-tab="albums">
+                            <a>
+                                <span class="icon"><i class="fas fa-compact-disc" aria-hidden="true"></i></span>
+                                <span>Albums</span>
+                            </a>
+                        </li>
+                        <li hx-get="/application/playlists" hx-trigger="click" hx-target="#table-content" class="" data-tab="playlists">
+                            <a>
+                                <span class="icon"><i class="fas fa-list" aria-hidden="true"></i></span>
+                                <span>Playlists</span>
+                            </a>
+                        </li>
+                        <li hx-get="/application/customers" hx-trigger="click" hx-target="#table-content" class="" data-tab="customers">
+                            <a>
+                                <span class="icon"><i class="fas fa-user" aria-hidden="true"></i></span>
+                                <span>Customers</span>
+                            </a>
+                        </li>
+                        <li hx-get="/application/employees" hx-trigger="click" hx-target="#table-content" class="" data-tab="employees">
+                            <a>
+                                <span class="icon"><i class="fas fa-user-tie" aria-hidden="true"></i></span>
+                                <span>Employees</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Content Tables -->
+<div class="box content-box" id="music-content">
+    <h2 class="title is-4">Artists</h2>
+    <p class="subtitle is-6">Browse through our music collection</p>
+
+    <div class="table-container">
+        <table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+            <tr>
+                <th style="width: 60%;">
+                    Artist
+                    <span class="icon sort-icon active" data-sort="artist">
+                        <i
+                            _="
+                              on click log 'clicked'
+                              set x to {name: 'Doug', age: 69}
+                              log x.name
+                              set strs to ['a', 'list', 'of', 'strings']
+                              set lens to strs.map( \ s -> s.length )
+                              log lens
+                            "
+                            id="the-sort-icon"
+                            class="fas fa-sort"
+                            data-sort="artist"
+                            aria-hidden="true"
+                        >
+                        </i>
+                    </span>
+                </th>
+                <th style="width: 15%;">
+                    Album Count
+                    <span class="icon sort-icon" data-sort="album_count">
+                        <i hx-get="/application/artists" hx-trigger="click" hx-vals="js:{
+                                &quot;class&quot;: Array.from(event.target.classList),
+                                &quot;sort&quot;: event.target.dataset.sort
+                            }" hx-include="#itemsPerPage" hx-target="#table-content" class="fas fa-sort" data-sort="album" aria-hidden="true">
+                        </i>
+                    </span>
+                </th>
+                <th style="width: 15%;">
+                    Track Count
+                    <span class="icon sort-icon" data-sort="track_count">
+                        <i hx-get="/application/artists" hx-trigger="click" hx-vals="js:{
+                                &quot;class&quot;: Array.from(event.target.classList),
+                                &quot;sort&quot;: event.target.dataset.sort
+                            }" hx-include="#itemsPerPage" hx-target="#table-content" class="fas fa-sort" data-sort="track" aria-hidden="true">
+                        </i>
+                    </span>
+                </th>
+                <th style="width: 10%;">Actions</th>
+            </tr>
+            </thead>
+            <!-- Populated by htmx -->
+            <tbody id="table-content" hx-get="/application/artists" hx-trigger="load" class="">
+    <tr>
+        <td>
+            A Cor Do Som
+        </td>
+        <td>
+            0
+        </td>
+        <td>
+            0
+        </td>
+        <td>
+            <button class="button is-small is-info view-details" data-id="43">
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            AC/DC
+        </td>
+        <td>
+            2
+        </td>
+        <td>
+            18
+        </td>
+        <td>
+            <button class="button is-small is-info view-details" data-id="1">
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Aaron Copland &amp; London Symphony Orchestra
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            <button class="button is-small is-info view-details" data-id="230">
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Aaron Goldberg
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            <button class="button is-small is-info view-details" data-id="202">
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Academy of St. Martin in the Fields &amp; Sir Neville Marriner
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            2
+        </td>
+        <td>
+            <button class="button is-small is-info view-details" data-id="214">
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Academy of St. Martin in the Fields Chamber Ensemble &amp; Sir Neville Marriner
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            <button class="button is-small is-info view-details" data-id="215">
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Academy of St. Martin in the Fields, John Birch, Sir Neville Marriner &amp; Sylvia McNair
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            <button class="button is-small is-info view-details" data-id="222">
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Academy of St. Martin in the Fields, Sir Neville Marriner &amp; Thurston Dart
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            1
+        </td>
+        <td>
+            <button class="button is-small is-info view-details" data-id="257">
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Academy of St. Martin in the Fields, Sir Neville Marriner &amp; William Bennett
+        </td>
+        <td>
+            0
+        </td>
+        <td>
+            0
+        </td>
+        <td>
+            <button class="button is-small is-info view-details" data-id="239">
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Accept
+        </td>
+        <td>
+            2
+        </td>
+        <td>
+            4
+        </td>
+        <td>
+            <button class="button is-small is-info view-details" data-id="2">
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+</tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <a class="pagination-previous">Previous</a>
+        <a class="pagination-next">Next</a>
+        <ul class="pagination-list">
+            <!-- Populated by JavaScript -->
+        </ul>
+    </nav>
+</div>
+
+                <!-- Stats Tiles -->
+                <div class="box">
+                    <div class="tile is-ancestor">
+                        <div class="tile is-parent">
+                            <article class="tile is-child">
+                                <p class="heading">
+                                <span class="icon">
+                                    <i class="fas fa-clock" aria-hidden="true"></i>
+                                </span>
+                                    Total Duration
+                                </p>
+                                <p class="title">347 hours</p>
+                            </article>
+                        </div>
+                        <div class="tile is-parent">
+                            <article class="tile is-child">
+                                <p class="heading">
+                                <span class="icon">
+                                    <i class="fas fa-music" aria-hidden="true"></i>
+                                </span>
+                                    Total Tracks
+                                </p>
+                                <p class="title" id="totalItems">0</p>
+                            </article>
+                        </div>
+                        <div class="tile is-parent">
+                            <article class="tile is-child">
+                                <p class="heading">
+                                <span class="icon">
+                                    <i class="fas fa-tags" aria-hidden="true"></i>
+                                </span>
+                                    Genres
+                                </p>
+                                <p class="title">25</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal for track details -->
+        <div class="modal" id="trackModal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Track Details</p>
+                    <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <!-- Populated by JavaScript -->
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-success">Add to Playlist</button>
+                    <button class="button">Close</button>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <!-- Sticky Footer -->
+    <footer class="footer brand-color custom-footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Let There Be Music!</strong>
+                &nbsp;© 2024&nbsp;
+                by <a href="https://happycanvasandcode.com/">Happy Canvas And Code</a>
+            </p>
+        </div>
+    </footer>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>
