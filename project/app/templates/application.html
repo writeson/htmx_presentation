@@ -93,6 +93,14 @@
                                     <select
                                         id="itemsPerPage"
                                         name="items_per_page"
+                                        _="on change
+                                            -- Send a click to rebuild current application view
+                                            log 'select clicked'
+                                            set icon to <i[data-sort='artist']/> in <table.table/>
+                                            if icon
+                                              trigger click on icon
+                                            end
+                                        "
                                     >
                                         <option value="5">5 per page</option>
                                         <option value="10" selected>10 per page</option>

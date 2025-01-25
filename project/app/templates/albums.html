@@ -7,11 +7,11 @@
         <table class="table is-fullwidth is-striped is-hoverable">
             <thead>
             <tr>
-                <th>
+                <th style="width: 40%">
                     Album
                     <span class="icon sort-icon" data-sort="album">
                         <i
-                                hx-get="/application/artists"
+                                hx-get="/application/albums"
                                 hx-trigger="click"
                                 hx-vals='js:{
                                 "sort": event.target.dataset.sort,
@@ -20,7 +20,7 @@
                                 hx-include="#itemsPerPage"
                                 hx-target="#table-content"
                                 class="fas fa-sort"
-                                data-sort="artist"
+                                data-sort="album_title"
                                 data-direction="desc"
                                 _="on click
                                  -- Reset all <i> elements' classes to fa-sort
@@ -43,11 +43,11 @@
                         </i>
                     </span>
                 </th>
-                <th>
+                <th style="width: 30%">
                     Artist
                     <span class="icon sort-icon" data-sort="artist">
                         <i
-                                hx-get="/application/artists"
+                                hx-get="/application/albums"
                                 hx-trigger="click"
                                 hx-vals='js:{
                                 "sort": event.target.dataset.sort,
@@ -79,11 +79,11 @@
                         </i>
                     </span>
                 </th>
-                <th>
+                <th style="width: 10%">
                     Duration
                     <span class="icon sort-icon" data-sort="duration">
                         <i
-                                hx-get="/application/artists"
+                                hx-get="/application/albums"
                                 hx-trigger="click"
                                 hx-vals='js:{
                                 "sort": event.target.dataset.sort,
@@ -92,7 +92,7 @@
                                 hx-include="#itemsPerPage"
                                 hx-target="#table-content"
                                 class="fas fa-sort"
-                                data-sort="artist"
+                                data-sort="album_duration"
                                 data-direction="desc"
                                 _="on click
                                  -- Reset all <i> elements' classes to fa-sort
@@ -115,11 +115,11 @@
                         </i>
                     </span>
                 </th>
-                <th>
+                <th style="width: 10%">
                     Price
                     <span class="icon sort-icon" data-sort="price">
                         <i
-                                hx-get="/application/artists"
+                                hx-get="/application/albums"
                                 hx-trigger="click"
                                 hx-vals='js:{
                                 "sort": event.target.dataset.sort,
@@ -128,7 +128,7 @@
                                 hx-include="#itemsPerPage"
                                 hx-target="#table-content"
                                 class="fas fa-sort"
-                                data-sort="artist"
+                                data-sort="album_price"
                                 data-direction="desc"
                                 _="on click
                                  -- Reset all <i> elements' classes to fa-sort
@@ -151,7 +151,7 @@
                         </i>
                     </span>
                 </th>
-                <th>Actions</th>
+                <th style="width: 10%">Actions</th>
             </tr>
             </thead>
             <!-- Populated by htmx -->

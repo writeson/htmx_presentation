@@ -1,18 +1,21 @@
-{% for artist in artists %}
+{% for album in albums %}
     <tr>
         <td>
-            {{ artist["name"] }}
+            {{ album["title"] }}
         </td>
         <td>
-            {{ artist["album_count"] }}
+            {{ album["artist"] }}
         </td>
-        <td>
-            {{ artist["track_count"] }}
+        <td class="has-text-right pr-6">
+            {{ album["minutes"] }}:{{ "{:02}".format(album["seconds"]) }}
+        </td>
+        <td class="has-text-right pr-6">
+            ${{ album["price"] }}
         </td>
         <td>
             <button 
                 class="button is-small is-info view-details" 
-                data-id="{{ artist['id'] }}"
+                data-id="{{ album['id'] }}"
             >
                 <span class="icon is-small">
                   <i class="fas fa-info-circle"></i>

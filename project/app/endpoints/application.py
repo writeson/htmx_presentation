@@ -122,31 +122,48 @@ async def get_artists(
 async def get_albums(
     request: Request,
     db: AsyncSession = Depends(get_db),
+    sort: str = Query(None, alias="sort"),
+    direction: str = Query(None, alias="direction"),
     offset: int = 0,
-    limit: int = 10,
+    items_per_page: int = Query(10, alias="items_per_page"),
 ):
+    limit = items_per_page
     async with db as session:
         query = (
             select(
-                Artist.id,
+                Album.title,
                 Artist.name,
-                func.count(distinct(Album.id)).label("album_count"),
-                func.count(distinct(Track.id)).label("track_count"),
+                func.sum(Track.milliseconds).label("album_duration"),
+                func.sum(Track.unit_price).label("album_price"),
             )
-            .outerjoin(Artist.albums)
-            .outerjoin(Album.tracks)
+            .join(Album.artist)
+            .join(Album.tracks)
             .offset(offset)
             .limit(limit)
-            .group_by(Artist.name)
-            .order_by(Artist.name)
+            .group_by(Album.title)
         )
+        query = query_order_by(query=query, sort=sort, direction=direction)
         results = await session.execute(query)
 
     # Convert each row to a dictionary
-    results_list = [row._mapping for row in results.fetchall()]
+    results_list = []
+    for row in results.fetchall():
+        duration_seconds = row.album_duration / 1000
+        minutes, seconds = divmod(duration_seconds, 60)
+        results_list.append(
+            {
+                "title": row.title,
+                "artist": row.name,
+                "minutes": int(minutes),
+                "seconds": int(seconds),
+                "price": row.album_price,
+            }
+        )
+
+    # results_list = [row._mapping for row in results.fetchall()]
 
     return templates.TemplateResponse(
-        name="partials/artists.html",
+        name="partials/albums.html",
         context={
             "request": request,
             "albums": results_list,
@@ -183,4 +200,10 @@ def query_order_by(query: Select, sort: str, direction: str) -> Select:
         query = query.order_by(sort_func("album_count"))
     elif sort == "track":
         query = query.order_by(sort_func("track_count"))
+    elif sort == "album_title":
+        query = query.order_by(sort_func(Album.title))
+    elif sort == "album_duration":
+        query = query.order_by(sort_func("album_duration"))
+    elif sort == "album_price":
+        query = query.order_by(sort_func("album_price"))
     return query
