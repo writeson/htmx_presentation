@@ -1,0 +1,23 @@
+{% for customer in customers %}
+    <tr>
+        <td>
+            {{ customer["full_name"] }}
+        </td>
+        <td class="has-text-right pr-6">
+            {{ customer["orders_total"] }}
+        </td>
+        <td class="has-text-right pr-6">
+            ${{ customer["orders_total_spent"] }}
+        </td>
+        <td>
+            <button 
+                class="button is-small is-info view-details" 
+                data-id="{{ customer['id'] }}"
+            >
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+{% endfor %}

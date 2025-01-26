@@ -157,25 +157,7 @@
                             </a>
                         </li>
                         <li
-                            hx-get="/application/playlists"
-                            hx-trigger="click"
-                            hx-target="#application-content"
-                            data-tab="playlists"
-                            _=" on click
-                              -- Reset other <li> elements 
-                              set items to <li/> in closest <ul/>
-                              remove .is-active from items
-                              add .is-active to me
-                              log 'clicked'
-                            "
-                        >
-                            <a>
-                                <span class="icon"><i class="fas fa-list"></i></span>
-                                <span>Playlists</span>
-                            </a>
-                        </li>
-                        <li
-                            hx-get="/application/customers"
+                            hx-get="/application/template/customers"
                             hx-trigger="click"
                             hx-target="#application-content"
                             data-tab="customers"
@@ -193,7 +175,7 @@
                             </a>
                         </li>
                         <li
-                            hx-get="/application/employees"
+                            hx-get="/application/template/employees"
                             hx-trigger="click"
                             hx-target="#application-content"
                             data-tab="employees"

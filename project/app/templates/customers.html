@@ -1,29 +1,28 @@
-<!-- Content Tables -->
-<div class="box content-box" id="music-content">
-    <h2 class="title is-4">Artists</h2>
+<!-- Customers Table -->
+<div class="box content-box" id="tracks-content">
+    <h2 class="title is-4">Customers</h2>
     <p class="subtitle is-6">Browse through our music collection</p>
 
     <div class="table-container">
         <table class="table is-fullwidth is-striped is-hoverable">
             <thead>
             <tr>
-                <th style="width: 60%;">
-                    Artist
+                <th style="width: 50%">
+                    Customer Name
                     <span class="icon sort-icon">
                         <i
-                            hx-get="/application/artists"
-                            hx-trigger="click"
-                            hx-vals='js:{
+                                hx-get="/application/customers"
+                                hx-trigger="click"
+                                hx-vals='js:{
                                 "sort": event.target.dataset.sort,
                                 "direction": event.target.dataset.direction
                             }'
-                            hx-include="#itemsPerPage"
-                            hx-target="#table-content"
-                            class="fas fa-sort"
-                            data-sort="artist_name"
-                            data-direction="desc"
-                            _="
-                              on click or load
+                                hx-include="#itemsPerPage"
+                                hx-target="#table-content"
+                                class="fas fa-sort"
+                                data-sort="customer_name"
+                                data-direction="desc"
+                                _="on click
                                  -- Reset all <i> elements' classes to fa-sort
                                  set icons to <i/> in closest <tr/>
                                  remove .fa-sort-down .fa-sort-up from icons
@@ -44,22 +43,22 @@
                         </i>
                     </span>
                 </th>
-                <th style="width: 15%;">
-                    Album Count
+                <th style="width: 20%" class="has-text-right">
+                    Orders
                     <span class="icon sort-icon">
                         <i
-                            hx-get="/application/artists"
-                            hx-trigger="click"
-                            hx-vals='js:{
+                                hx-get="/application/customers"
+                                hx-trigger="click"
+                                hx-vals='js:{
                                 "sort": event.target.dataset.sort,
                                 "direction": event.target.dataset.direction
                             }'
-                            hx-include="#itemsPerPage"
-                            hx-target="#table-content"
-                            class="fas fa-sort"
-                            data-sort="artist_album_count"
-                            data-direction="desc"
-                            _="on click
+                                hx-include="#itemsPerPage"
+                                hx-target="#table-content"
+                                class="fas fa-sort"
+                                data-sort="customer_orders"
+                                data-direction="desc"
+                                _="on click
                                  -- Reset all <i> elements' classes to fa-sort
                                  set icons to <i/> in closest <tr/>
                                  remove .fa-sort-down .fa-sort-up from icons
@@ -80,22 +79,22 @@
                         </i>
                     </span>
                 </th>
-                <th style="width: 15%;">
-                    Track Count
-                    <span class="icon sort-icon">
+                <th style="width: 20%" class="has-text-right">
+                    Orders Total Spent
+                    <span class="icon sort-icon" data-sort="order_total">
                         <i
-                            hx-get="/application/artists"
-                            hx-trigger="click"
-                            hx-vals='js:{
+                                hx-get="/application/customers"
+                                hx-trigger="click"
+                                hx-vals='js:{
                                 "sort": event.target.dataset.sort,
                                 "direction": event.target.dataset.direction
                             }'
-                            hx-include="#itemsPerPage"
-                            hx-target="#table-content"
-                            class="fas fa-sort"
-                            data-sort="artist_track"
-                            data-direction="desc"
-                            _="on click
+                                hx-include="#itemsPerPage"
+                                hx-target="#table-content"
+                                class="fas fa-sort"
+                                data-sort="customer_orders_spent"
+                                data-direction="desc"
+                                _="on click
                                  -- Reset all <i> elements' classes to fa-sort
                                  set icons to <i/> in closest <tr/>
                                  remove .fa-sort-down .fa-sort-up from icons
@@ -116,13 +115,13 @@
                         </i>
                     </span>
                 </th>
-                <th style="width: 10%;">Actions</th>
+                <th style="width: 10%">Actions</th>
             </tr>
             </thead>
             <!-- Populated by htmx -->
             <tbody
                 id="table-content"
-                hx-get="/application/artists"
+                hx-get="/application/customers"
                 hx-trigger="load"
             >
             </tbody>

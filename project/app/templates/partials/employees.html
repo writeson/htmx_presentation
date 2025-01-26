@@ -1,0 +1,26 @@
+{% for employee in employees %}
+    <tr>
+        <td>
+            {{ employee["full_name"] }}
+        </td>
+        <td class="has-text-right pr-6">
+            {{ employee["reports_to"] }}
+        </td>
+        <td class="has-text-right pr-6">
+            {{ employe["customers_total"] }}
+        </td>
+        <td class="has-text-right pr-6">
+            ${{ employe["customers_total_spent"] }}
+        </td>
+        <td>
+            <button 
+                class="button is-small is-info view-details" 
+                data-id="{{ employee['id'] }}"
+            >
+                <span class="icon is-small">
+                  <i class="fas fa-info-circle"></i>
+                </span>
+            </button>
+        </td>
+    </tr>
+{% endfor %}
