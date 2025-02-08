@@ -1,16 +1,19 @@
 {% for employee in employees %}
     <tr>
         <td>
-            {{ employee["full_name"] }}
+            {{ employee["employee_fullname"] }}
+        </td>
+        <td>
+            {{ employee["manager_fullname"] }}
+        </td>
+        <td>
+            {{ employee["manager_title"] }}
         </td>
         <td class="has-text-right pr-6">
-            {{ employee["reports_to"] }}
+            {{ employee["employee_total_customers"] }}
         </td>
         <td class="has-text-right pr-6">
-            {{ employe["customers_total"] }}
-        </td>
-        <td class="has-text-right pr-6">
-            ${{ employe["customers_total_spent"] }}
+            ${{ employee["employee_total_customers_spent"] }}
         </td>
         <td>
             <button 

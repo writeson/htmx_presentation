@@ -7,11 +7,11 @@
         <table class="table is-fullwidth is-striped is-hoverable">
             <thead>
             <tr>
-                <th style="width: 30%">
-                    Customer Name
+                <th style="width: 20%">
+                    Employee
                     <span class="icon sort-icon" data-sort="employee">
                         <i
-                                hx-get="/application/customers"
+                                hx-get="/application/employees"
                                 hx-trigger="click"
                                 hx-vals='js:{
                                 "sort": event.target.dataset.sort,
@@ -20,7 +20,7 @@
                                 hx-include="#itemsPerPage"
                                 hx-target="#table-content"
                                 class="fas fa-sort"
-                                data-sort="employee_name"
+                                data-sort="employee_fullname"
                                 data-direction="desc"
                                 _="on click
                                  -- Reset all <i> elements' classes to fa-sort
@@ -43,11 +43,11 @@
                         </i>
                     </span>
                 </th>
-                <th style="width: 30%">
-                    Reports To
+                <th style="width: 20%">
+                    Manager
                     <span class="icon sort-icon" data-sort="reports_to">
                         <i
-                                hx-get="/application/customers"
+                                hx-get="/application/employees"
                                 hx-trigger="click"
                                 hx-vals='js:{
                                 "sort": event.target.dataset.sort,
@@ -56,7 +56,43 @@
                                 hx-include="#itemsPerPage"
                                 hx-target="#table-content"
                                 class="fas fa-sort"
-                                data-sort="reports_to"
+                                data-sort="manager_fullname"
+                                data-direction="desc"
+                                _="on click
+                                 -- Reset all <i> elements' classes to fa-sort
+                                 set icons to <i/> in closest <tr/>
+                                 remove .fa-sort-down .fa-sort-up from icons
+                                 add .fa-sort to icons
+                                   
+                                 -- set clicked icon's direction and class
+                                 if @data-direction == 'asc'
+                                    set @data-direction to 'desc'
+                                    remove .fa-sort-up .fa-sort from me
+                                    add .fa-sort-down to me                                    
+                                 else
+                                    set @data-direction to 'asc'
+                                    remove .fa-sort-down .fa-sort from me
+                                    add .fa-sort-up to me
+                                 end
+                            "
+                        >
+                        </i>
+                    </span>
+                </th>
+                <th style="width: 20%">
+                    Manager Title
+                    <span class="icon sort-icon" data-sort="reports_to">
+                        <i
+                                hx-get="/application/employees"
+                                hx-trigger="click"
+                                hx-vals='js:{
+                                "sort": event.target.dataset.sort,
+                                "direction": event.target.dataset.direction
+                            }'
+                                hx-include="#itemsPerPage"
+                                hx-target="#table-content"
+                                class="fas fa-sort"
+                                data-sort="manager_title"
                                 data-direction="desc"
                                 _="on click
                                  -- Reset all <i> elements' classes to fa-sort
@@ -83,7 +119,7 @@
                     Total Customers
                     <span class="icon sort-icon" data-sort="customers_total">
                         <i
-                                hx-get="/application/customers"
+                                hx-get="/application/employees"
                                 hx-trigger="click"
                                 hx-vals='js:{
                                 "sort": event.target.dataset.sort,
@@ -92,7 +128,7 @@
                                 hx-include="#itemsPerPage"
                                 hx-target="#table-content"
                                 class="fas fa-sort"
-                                data-sort="customer_total"
+                                data-sort="employee_total_customers"
                                 data-direction="desc"
                                 _="on click
                                  -- Reset all <i> elements' classes to fa-sort
@@ -119,7 +155,7 @@
                     Customers Spent
                     <span class="icon sort-icon" data-sort="customers_total_spent">
                         <i
-                                hx-get="/application/customers"
+                                hx-get="/application/employees"
                                 hx-trigger="click"
                                 hx-vals='js:{
                                 "sort": event.target.dataset.sort,
@@ -128,7 +164,7 @@
                                 hx-include="#itemsPerPage"
                                 hx-target="#table-content"
                                 class="fas fa-sort"
-                                data-sort="customer_total_spent"
+                                data-sort="employee_total_customers_spent"
                                 data-direction="desc"
                                 _="on click
                                  -- Reset all <i> elements' classes to fa-sort
@@ -157,7 +193,7 @@
             <!-- Populated by htmx -->
             <tbody
                 id="table-content"
-                hx-get="/application/customers"
+                hx-get="/application/employees"
                 hx-trigger="load"
             >
             </tbody>

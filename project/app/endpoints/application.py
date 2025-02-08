@@ -62,6 +62,7 @@ async def home(
         context={
             "request": request,
             "partial_template": f"{basename}.html",
+            "current_page": 1,
         },
     )
 
@@ -135,7 +136,7 @@ async def get_albums(
         query = (
             select(
                 Album.title,
-                Artist.name,
+                Artist.name.label("album_artist"),
                 func.sum(Track.milliseconds).label("album_duration"),
                 func.sum(Track.unit_price).label("album_price"),
             )
@@ -145,7 +146,9 @@ async def get_albums(
             .limit(limit)
             .group_by(Album.title)
         )
-        query = query_order_by(query=query, sort=sort, direction=direction)
+        query = query_order_by(
+            query=query, path=request.url.path, sort=sort, direction=direction
+        )
         results = await session.execute(query)
 
     # Convert each row to a dictionary
@@ -156,7 +159,7 @@ async def get_albums(
         results_list.append(
             {
                 "title": row.title,
-                "artist": row.name,
+                "artist": row.album_artist,
                 "minutes": int(minutes),
                 "seconds": int(seconds),
                 "price": row.album_price,
@@ -196,7 +199,9 @@ async def get_customers(
             .limit(limit)
             .group_by("fullname")
         )
-        query = query_order_by(query=query, sort=sort, direction=direction)
+        query = query_order_by(
+            query=query, path=request.url.path, sort=sort, direction=direction
+        )
         results = await session.execute(query)
 
     # Convert each row to a dictionary
@@ -237,34 +242,45 @@ async def get_employees(
                 func.concat(Employee.last_name, ", ", Employee.first_name).label(
                     "employee_fullname"
                 ),
-                func.concat(Manager.last_name, ", ", Manager.first_name).label(
-                    "manager_fullname"
+                func.coalesce(
+                    func.nullif(
+                        func.concat(Manager.last_name, ", ", Manager.first_name), ", "
+                    ),
+                    "",
+                ).label("manager_fullname"),
+                func.coalesce(Manager.title, "").label("manager_title"),
+                func.count(distinct(Customer.id)).label("employee_total_customers"),
+                func.coalesce(func.sum(Invoice.total), 0).label(
+                    "employee_total_customers_spent"
                 ),
             )
             .outerjoin(Manager, Employee.reports_to == Manager.id)
+            .outerjoin(Customer, Customer.support_rep_id == Employee.id)
+            .outerjoin(Invoice, Invoice.customer_id == Customer.id)
             .offset(offset)
             .limit(limit)
             .group_by("employee_fullname")
         )
-        query = query_order_by(query=query, sort=sort, direction=direction)
+        query = query_order_by(
+            query=query, path=request.url.path, sort=sort, direction=direction
+        )
         results = await session.execute(query)
 
     # Convert each row to a dictionary
     results_list = []
     for row in results.fetchall():
-        duration_seconds = row.album_duration / 1000
-        minutes, seconds = divmod(duration_seconds, 60)
         results_list.append(
             {
-                "title": row.title,
-                "artist": row.name,
-                "minutes": int(minutes),
-                "seconds": int(seconds),
-                "price": row.album_price,
+                "id": row.id,
+                "employee_fullname": row.employee_fullname,
+                "manager_fullname": row.manager_fullname,
+                "manager_title": row.manager_title,
+                "employee_total_customers": row.employee_total_customers,
+                "employee_total_customers_spent": row.employee_total_customers_spent,
             }
         )
     return templates.TemplateResponse(
-        name="partials/albums.html",
+        name="partials/employees.html",
         context={
             "request": request,
             "employees": results_list,
@@ -281,6 +297,30 @@ async def get_about(
         name="about.html",
         context={"request": request},
     )
+
+
+@router.get("/pagination", response_class=HTMLResponse)
+async def pagination(
+    request: Request,
+    tab: str = "artists",  # Default to "artists" if no tab is provided
+    page: int = 1,  # Default to page 1 if no page is provided
+):
+    total_pages = 10  # Replace with the actual total number of pages
+
+    # Generate pagination links
+    pagination_links = []
+    for p in range(1, total_pages + 1):
+        if p == page:
+            pagination_links.append(
+                f'<li><a class="pagination-link is-current" aria-label="Page {p}" aria-current="page">{p}</a></li>'
+            )
+        else:
+            pagination_links.append(
+                f'<li><a class="pagination-link" aria-label="Goto page {p}" hx-get="/pagination?tab={tab}&page={p}" hx-trigger="click" hx-target=".pagination-list">{p}</a></li>'
+            )
+
+    # Return the pagination links as HTML
+    return "".join(pagination_links)
 
 
 def query_order_by(query: Select, path: str, sort: str, direction: str) -> Select:
@@ -305,6 +345,8 @@ def query_order_by(query: Select, path: str, sort: str, direction: str) -> Selec
             return query.order_by(sort_func("track_count"))
         case "album_title":
             return query.order_by(sort_func(Album.title))
+        case "album_artist":
+            return query.order_by(sort_func("album_artist"))
         case "album_duration":
             return query.order_by(sort_func("album_duration"))
         case "album_price":
@@ -315,7 +357,16 @@ def query_order_by(query: Select, path: str, sort: str, direction: str) -> Selec
             return query.order_by(sort_func("orders_total"))
         case "customer_orders_spent":
             return query.order_by(sort_func("orders_total_spent"))
+        case "employee_fullname":
+            return query.order_by(sort_func("employee_fullname"))
+        case "manager_fullname":
+            return query.order_by(sort_func("manager_fullname"))
+        case "manager_title":
+            return query.order_by(sort_func("manager_title"))
+        case "employee_total_customers":
+            return query.order_by(sort_func("employee_total_customers"))
+        case "employee_total_customers_spent":
+            return query.order_by(sort_func("employee_total_customers_spent"))
         case _:
             # Got here because @data-sort is undefined
-            if path == "/application/artists":
-                return query.order_by(sort_func(Artist.name))
+            return query
