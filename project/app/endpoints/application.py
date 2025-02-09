@@ -5,11 +5,11 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import select, func, desc, asc, distinct
 
-# from sqlalchemy.orm import selectinload, joinedload
+from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
-import jinja_partials
+# import jinja_partials
 
 from app.database import get_db
 from app.models.artists import Artist, ArtistRead  # noqa: F401
@@ -26,7 +26,7 @@ from app.models.employees import Employee, EmployeeRead  # noqa: F401
 # initialize the Jinja2 templates
 templates_dir = PathlibPath(__file__).resolve().parent.parent / "templates"
 templates = Jinja2Templates(directory=templates_dir)
-jinja_partials.register_starlette_extensions(templates)
+# jinja_partials.register_starlette_extensions(templates)
 
 
 # create a router for the model
@@ -62,7 +62,6 @@ async def home(
         context={
             "request": request,
             "partial_template": f"{basename}.html",
-            "current_page": 1,
         },
     )
 
@@ -302,25 +301,54 @@ async def get_about(
 @router.get("/pagination", response_class=HTMLResponse)
 async def pagination(
     request: Request,
-    tab: str = "artists",  # Default to "artists" if no tab is provided
-    page: int = 1,  # Default to page 1 if no page is provided
+    db: AsyncSession = Depends(get_db),
+    tab: str = Query(None, alias="tab"),
+    items_per_page: int = Query(10, alias="items_per_page"),
+    current_page: int = 1,
 ):
-    total_pages = 10  # Replace with the actual total number of pages
+    async with db as session:
+        # Get the table to query for pagination
+        table_name = tab.title()
+        query = select(func.count()).select_from(text(table_name))
+        results = await session.execute(query)
+        total_items = results.scalar()
+        total_pages = (total_items + items_per_page - 1) // items_per_page
+
+        # Ensure the current page is within valid range
+        current_page = max(1, min(current_page, total_pages))
 
     # Generate pagination links
     pagination_links = []
-    for p in range(1, total_pages + 1):
-        if p == page:
-            pagination_links.append(
-                f'<li><a class="pagination-link is-current" aria-label="Page {p}" aria-current="page">{p}</a></li>'
+    if total_pages <= 7:
+        # Show all pages if there are 7 or fewer
+        pagination_links = list(range(1, total_pages + 1))
+    else:
+        # Show first, last, and surrounding pages
+        if current_page <= 4:
+            pagination_links = list(range(1, 6)) + ["...", total_pages]
+        elif current_page >= total_pages - 3:
+            pagination_links = [1, "..."] + list(
+                range(total_pages - 4, total_pages + 1)
             )
         else:
-            pagination_links.append(
-                f'<li><a class="pagination-link" aria-label="Goto page {p}" hx-get="/pagination?tab={tab}&page={p}" hx-trigger="click" hx-target=".pagination-list">{p}</a></li>'
+            pagination_links = (
+                [1, "..."]
+                + list(range(current_page - 2, current_page + 3))
+                + ["...", total_pages]
             )
 
-    # Return the pagination links as HTML
-    return "".join(pagination_links)
+    retval = templates.TemplateResponse(
+        name="partials/pagination.html",
+        context={
+            "request": request,
+            "current_page": current_page,
+            "total_pages": total_pages,
+            "pagination_links": pagination_links,
+            "items_per_page": items_per_page,
+            "tab": tab,
+        },
+    )
+    return retval
 
 
 def query_order_by(query: Select, path: str, sort: str, direction: str) -> Select:

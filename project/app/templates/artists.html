@@ -129,31 +129,16 @@
         </table>
     </div>
 
-    <!-- Pagination -->
-    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-        <a
-                class="pagination-previous" 
-                hx-get="/pagination?page=0"
-                hx-trigger="click"
-                hx-target=".pagination-list"
-        >
-            Previous
-        </a>
-        <a
-                class="pagination-next"
-                hx-get="/pagination?page=2"     {# {{ current_page + 1 }} #}
-                hx-trigger="click"
-                hx-target=".pagination-list"
-        >
-            Next
-        </a>
-        <ul
-                class="pagination-list"
-                hx-get="/pagination?page=1"
-                hx-trigger="load"
-                hx-target="this"
-        >
-            <!-- Populated by htmx -->
-        </ul>
+    <!-- Pagination populated by htmx-->
+    <nav
+            hx-get="/application/pagination"
+            hx-trigger="load"
+            hx-target="this"
+            hx-vals='js:{"tab": "artists"}'
+            hx-include="#itemsPerPage"
+            class="pagination is-centered"
+            role="navigation"
+            aria-label="pagination"
+    >
     </nav>
 </div>

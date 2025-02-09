@@ -1,0 +1,49 @@
+<!-- Previous Button -->
+<a
+    hx-get="/application/pagination?tab={{ tab }}&items_per_page={{ items_per_page }}&current_page={{ current_page - 1 }}"
+    hx-trigger="click"
+    class="pagination-previous"
+    {% if current_page == 1 %}disabled{% endif %}
+    _ = "on click
+        trigger click on #musi-content 
+    "
+>
+    Previous
+</a>
+
+<!-- Next Button -->
+<a
+    hx-get="/application/pagination?tab={{ tab }}&items_per_page={{ items_per_page }}&current_page={{ current_page + 1 }}"
+    hx-trigger="click"
+    class="pagination-next"
+    {% if current_page == total_pages %}disabled{% endif %}
+    _ = "on click
+        trigger click on #musi-content 
+    "
+>
+    Next page
+</a>
+
+<!-- Pagination Links -->
+<ul class="pagination-list">
+    {% for link in pagination_links %}
+    <li>
+        {% if link == "..." %}
+            <span class="pagination-ellipsis">&hellip;</span>
+        {% else %}
+            <a
+                hx-get="/application/pagination?tab={{ tab }}&items_per_page={{ items_per_page }}&current_page={{ link }}"
+                hx-trigger="click"
+                class="pagination-link {% if link == current_page %}is-current{% endif %}"
+                aria-label="Goto page {{ link }}"
+                _="on click
+                    send updateDisplay(tab: {{ tab }}) to #artists-tab
+                    log 'triggering updateDisplay on artists-tab'
+                "
+            >
+                {{ link }}
+            </a>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>

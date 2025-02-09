@@ -120,17 +120,18 @@
                 <div class="tabs is-centered is-boxed">
                     <ul>
                         <li
+                            id="artists-tab"
                             hx-get="/application/template/artists"
-                            hx-trigger="click"
+                            hx-trigger="click, updateDisplay"
                             hx-target="#application-content"
                             class="is-active"
                             data-tab="artists"
-                            _=" on click
+                            _=" on click or updateDisplay
                               -- Reset other <li> elements 
                               set items to <li/> in closest <ul/>
                               remove .is-active from items
                               add .is-active to me
-                              log 'clicked'
+                              log 'clicked artists tab'
                             "
                         >
                             <a>
@@ -139,6 +140,7 @@
                             </a>
                         </li>
                         <li
+                            id="albums-tab"
                             hx-get="/application/template/albums"
                             hx-trigger="click"
                             hx-target="#application-content"
@@ -157,6 +159,7 @@
                             </a>
                         </li>
                         <li
+                            id="customers-tab"
                             hx-get="/application/template/customers"
                             hx-trigger="click"
                             hx-target="#application-content"
@@ -175,6 +178,7 @@
                             </a>
                         </li>
                         <li
+                            id="employees-tab"
                             hx-get="/application/template/employees"
                             hx-trigger="click"
                             hx-target="#application-content"
