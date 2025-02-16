@@ -14,20 +14,6 @@
     <script src="/static/js/hyperscript.min.js"></script>
 
 
-{#    <script>#}
-{#        htmx.on("htmx:beforeRequest", function(evt) {#}
-{#            console.log("Making request to:", evt.detail.requestConfig.url);#}
-{#            console.log("Current page before request:", evt.detail.elt.getAttribute("data-current-page"));#}
-{#        });#}
-{##}
-{#        htmx.on("htmx:afterRequest", function(evt) {#}
-{#            console.log("Request completed");#}
-{#            console.log("Response status:", evt.detail.xhr.status);#}
-{#            if (evt.detail.xhr.status === 200) {#}
-{#                console.log("Page updated successfully");#}
-{#            }#}
-{#        });#}
-{#    </script>#}
 
 
 </head>
@@ -293,5 +279,21 @@
             </p>
         </div>
     </footer>
+
+    <script>
+        // Trigger the initial load of the application content
+        //  after a short delay to let all the HTMX content exist
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+                var tableContent = document.querySelector('#table-content');
+                if (tableContent) {
+                    var event = new Event("customLoad");
+                    tableContent.dispatchEvent(event);
+                    console.log("Triggered load event to #table-content")
+                }
+            }, 100); // 1 second timeout
+        });
+    </script>
+
 </body>
 </html>

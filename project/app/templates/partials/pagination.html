@@ -1,7 +1,9 @@
 <!-- Previous Button -->
 <a
-    hx-get="/application/pagination?tab={{ tab }}&items_per_page={{ items_per_page }}&current_page={{ current_page - 1 }}"
+    hx-get="/application/pagination"
     hx-trigger="click"
+    hx-target="#table-content"
+    hx-vals='{"current_page": "{{ current_page - 1 }}", "items_per_page": "{{ items_per_page }}"}'
     class="pagination-previous"
     {% if current_page == 1 %}disabled{% endif %}
     _ = "on click
@@ -15,14 +17,22 @@
 
 <!-- Next Button -->
 <a
-    hx-get="/application/pagination?tab={{ tab }}&items_per_page={{ items_per_page }}&current_page={{ current_page + 1 }}"
+    hx-get="/application/pagination"
     hx-trigger="click"
+    hx-target="#table-content"
+    hx-vals='{"current_page": "{{ current_page + 1 }}", "items_per_page": "{{ items_per_page }}"}'
     class="pagination-next"
     {% if current_page == total_pages %}disabled{% endif %}
     _ = "on click
         set currentPage to {{ current_page + 1 }}
-        trigger updateDisplay(tab: '{{ tab }}', current_page: currentPage) on #artists-tab
+        trigger updateDisplay(
+            tab: '{{ tab }}',
+            current_page: currentPage
+        ) on #table-content
         log `Page changed to ${currentPage}`
+        // for el in (closest <ul/>).querySelectorAll('.pagination-link')
+        //     remove .is-current from el
+        // end
     "
 >
     Next page
@@ -33,12 +43,12 @@
     {% for link in pagination_links %}
     <li>
         {% if link == "..." %}
-        <span class="pagination-ellipsis">&hellip;</span>
+            <span class="pagination-ellipsis">&hellip;</span>
         {% else %}
         <a
-                hx-get="/application/artists"
+                hx-get="/application/pagination"
                 hx-trigger="click"
-                hx-target="#music-content"
+                hx-target="#table-content"
                 hx-vals='{"current_page": "{{ link }}", "items_per_page": "{{ items_per_page }}"}'
                 class="pagination-link {% if link == current_page %}is-current{% endif %}"
                 aria-label="Goto page {{ link }}"
@@ -47,8 +57,12 @@
                     trigger updateDisplay(
                         tab: '{{ tab }}',
                         current_page: currentPage
-                    ) on #artists-tab
+                    ) on #table-content
                     log `currentPage changed to ${currentPage}`
+                    then
+                    for el in (closest <ul/>).querySelectorAll('.pagination-link')
+                        remove .is-current from el
+                    end
                     add .is-current to me
                 "
         >

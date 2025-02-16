@@ -123,7 +123,10 @@
             <tbody
                 id="table-content"
                 hx-get="/application/artists"
-                hx-trigger="load"
+                hx-trigger="customLoad, updateDisplay"
+                _=" on updateDisplay
+                    log 'updateDisplay event received'
+                "
             >
             </tbody>
         </table>
