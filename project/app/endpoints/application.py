@@ -86,10 +86,15 @@ async def get_artists(
     db: AsyncSession = Depends(get_db),
     sort: str = Query(None, alias="sort"),
     direction: str = Query(None, alias="direction"),
-    offset: int = 0,
+    current_page: int = Query(1, alias="current_page"),
     items_per_page: int = Query(10, alias="items_per_page"),
 ):
+    # Log received parameters
+    print(f"Current Page: {current_page}")
+    print(f"Items Per Page: {items_per_page}")
+
     limit = items_per_page
+    offset = items_per_page * (current_page - 1)
     async with db as session:
         query = (
             select(
@@ -112,13 +117,14 @@ async def get_artists(
     # Convert each row to a dictionary
     results_list = [row._mapping for row in results.fetchall()]
 
-    return templates.TemplateResponse(
+    retval = templates.TemplateResponse(
         name="partials/artists.html",
         context={
             "request": request,
             "artists": results_list,
         },
     )
+    return retval
 
 
 @router.get("/albums", response_class=HTMLResponse)
@@ -304,7 +310,7 @@ async def pagination(
     db: AsyncSession = Depends(get_db),
     tab: str = Query(None, alias="tab"),
     items_per_page: int = Query(10, alias="items_per_page"),
-    current_page: int = 1,
+    current_page: int = Query(1, alias="current_page"),
 ):
     async with db as session:
         # Get the table to query for pagination

@@ -12,7 +12,24 @@
     <script src="https://kit.fontawesome.com/336253754b.js" crossorigin="anonymous"></script>
     <script src="/static/js/htmx.min.js"></script>
     <script src="/static/js/hyperscript.min.js"></script>
-    <script src="/static/js/application.js"></script>
+
+
+{#    <script>#}
+{#        htmx.on("htmx:beforeRequest", function(evt) {#}
+{#            console.log("Making request to:", evt.detail.requestConfig.url);#}
+{#            console.log("Current page before request:", evt.detail.elt.getAttribute("data-current-page"));#}
+{#        });#}
+{##}
+{#        htmx.on("htmx:afterRequest", function(evt) {#}
+{#            console.log("Request completed");#}
+{#            console.log("Response status:", evt.detail.xhr.status);#}
+{#            if (evt.detail.xhr.status === 200) {#}
+{#                console.log("Page updated successfully");#}
+{#            }#}
+{#        });#}
+{#    </script>#}
+
+
 </head>
 <body hx-ext="hyperscript">
     <div id="application" class="content-wrapper">
@@ -203,7 +220,7 @@
                 <div 
                     id="application-content"
                     hx-get="/application/template/artists"
-                    hx-trigger="load"
+                    hx-trigger="load from:body"
                 >
                 </div>
 

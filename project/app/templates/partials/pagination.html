@@ -5,7 +5,9 @@
     class="pagination-previous"
     {% if current_page == 1 %}disabled{% endif %}
     _ = "on click
-        trigger click on #musi-content 
+        set currentPage to {{ current_page - 1 }}
+        trigger updateDisplay(tab: '{{ tab }}', current_page: currentPage) on #artists-tab
+        log `Page changed to ${currentPage}`
     "
 >
     Previous
@@ -18,7 +20,9 @@
     class="pagination-next"
     {% if current_page == total_pages %}disabled{% endif %}
     _ = "on click
-        trigger click on #musi-content 
+        set currentPage to {{ current_page + 1 }}
+        trigger updateDisplay(tab: '{{ tab }}', current_page: currentPage) on #artists-tab
+        log `Page changed to ${currentPage}`
     "
 >
     Next page
@@ -29,20 +33,27 @@
     {% for link in pagination_links %}
     <li>
         {% if link == "..." %}
-            <span class="pagination-ellipsis">&hellip;</span>
+        <span class="pagination-ellipsis">&hellip;</span>
         {% else %}
-            <a
-                hx-get="/application/pagination?tab={{ tab }}&items_per_page={{ items_per_page }}&current_page={{ link }}"
+        <a
+                hx-get="/application/artists"
                 hx-trigger="click"
+                hx-target="#music-content"
+                hx-vals='{"current_page": "{{ link }}", "items_per_page": "{{ items_per_page }}"}'
                 class="pagination-link {% if link == current_page %}is-current{% endif %}"
                 aria-label="Goto page {{ link }}"
                 _="on click
-                    send updateDisplay(tab: {{ tab }}) to #artists-tab
-                    log 'triggering updateDisplay on artists-tab'
+                    set currentPage to {{ link }}
+                    trigger updateDisplay(
+                        tab: '{{ tab }}',
+                        current_page: currentPage
+                    ) on #artists-tab
+                    log `currentPage changed to ${currentPage}`
+                    add .is-current to me
                 "
-            >
-                {{ link }}
-            </a>
+        >
+            {{ link }}
+        </a>
         {% endif %}
     </li>
     {% endfor %}
