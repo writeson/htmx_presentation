@@ -18,7 +18,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -28,20 +28,20 @@ from middleware import log_middleware, MetadataMiddleware
 from database import init_db
 
 # get the endpoint models to build the routes
-from app.models import artists
-from app.models import albums
-from app.models import tracks
-from app.models import genres
-from app.models import playlists
-from app.models import media_types
-from app.models import invoices
-from app.models import invoice_items
-from app.models import customers
-from app.models import employees
-from app.endpoints.routes import build_routes
+from models import artists
+from models import albums
+from models import tracks
+from models import genres
+from models import playlists
+from models import media_types
+from models import invoices
+from models import invoice_items
+from models import customers
+from models import employees
+from endpoints.routes import build_routes
 
 # from app.endpoints.search import router as search_router
-from app.endpoints.application import router as application_router
+from endpoints.application import router as application_router
 from logger_config import setup_logging
 
 
@@ -114,6 +114,11 @@ def app_factory():
 
     # add the application route
     fastapi_app.include_router(application_router, prefix="/application")
+
+    # add a redirect from root to /application
+    @fastapi_app.get("/", include_in_schema=False)
+    async def redirect_to_application():
+        return RedirectResponse(url="/application")
 
     return fastapi_app
 

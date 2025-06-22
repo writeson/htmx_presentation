@@ -19,9 +19,9 @@ RUN useradd -r -s /bin/false appuser && \
     chmod -R 777 /home/appuser/.cache && \
     chown -R appuser:appuser /project && \
     chown -R appuser:appuser /home/appuser
-    
+
 # Copy only the files needed for dependency installation first
-COPY --chown=appuser:appuser project/pyproject.toml project/uv.lock ./
+COPY --chown=appuser:appuser pyproject.toml uv.lock ./
 
 # Switch to non-root user before installing dependencies
 USER appuser
@@ -36,5 +36,5 @@ COPY --chown=appuser:appuser project/app ./app
 EXPOSE 8000
 
 # Use exec form of CMD with specific uvicorn settings for better performance
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000", \
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", \
      "--workers", "4", "--loop", "uvloop", "--http", "httptools"]

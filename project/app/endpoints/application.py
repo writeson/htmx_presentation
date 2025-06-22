@@ -11,16 +11,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 # import jinja_partials
 
-from app.database import get_db
-from app.models.artists import Artist, ArtistRead  # noqa: F401
-from app.models.albums import Album, AlbumRead  # noqa: F401
-from app.models.tracks import Track, TrackRead  # noqa: F401
-from app.models.playlists import Playlist, PlaylistRead  # noqa: F401
-from app.models.invoices import Invoice, InvoiceRead  # noqa: F401
-from app.models.invoice_items import InvoiceItem, InvoiceItemRead  # noqa: F401
-from app.models.playlist_track import PlaylistTrack  # noqa: F401
-from app.models.customers import Customer, CustomerRead  # noqa: F401
-from app.models.employees import Employee, EmployeeRead  # noqa: F401
+from database import get_db
+from models.artists import Artist, ArtistRead  # noqa: F401
+from models.albums import Album, AlbumRead  # noqa: F401
+from models.tracks import Track, TrackRead  # noqa: F401
+from models.playlists import Playlist, PlaylistRead  # noqa: F401
+from models.invoices import Invoice, InvoiceRead  # noqa: F401
+from models.invoice_items import InvoiceItem, InvoiceItemRead  # noqa: F401
+from models.playlist_track import PlaylistTrack  # noqa: F401
+from models.customers import Customer, CustomerRead  # noqa: F401
+from models.employees import Employee, EmployeeRead  # noqa: F401
 
 
 # initialize the Jinja2 templates
