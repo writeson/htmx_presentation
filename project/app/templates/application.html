@@ -13,9 +13,6 @@
     <script src="/static/js/htmx.min.js"></script>
     <script src="/static/js/hyperscript.min.js"></script>
 
-
-
-
 </head>
 <body hx-ext="hyperscript">
     <div id="application" class="content-wrapper">
@@ -120,7 +117,18 @@
         <section class="section">
             <div id="container" class="container">
                 <!-- Application Navigation Tabs -->
-                <div class="tabs is-centered is-boxed">
+                <div
+                    class="tabs is-centered is-boxed"
+                    _="on htmx:afterSwap from #application-content
+                        log 'htmx:afterSwap event fired'
+                        log event.detail.pathInfo.requestPath
+                        if event.detail.pathInfo.requestPath is '/application/about'
+                            set my style.display to 'none'
+                        else
+                            set my style.display to 'block'
+                        end
+                    "
+                >
                     <ul>
                         <li
                             id="artists-tab"
@@ -211,7 +219,19 @@
                 </div>
 
                 <!-- Stats Tiles -->
-                <div class="box" style="margin-top: 1em;">
+                <div
+                    class="box"
+                    style="margin-top: 1em;"
+                    _="on htmx:afterSwap from #application-content
+                        log 'htmx:afterSwap event fired'
+                        log event.detail.pathInfo.requestPath
+                        if event.detail.pathInfo.requestPath is '/application/about'
+                            set my style.display to 'none'
+                        else
+                            set my style.display to 'block'
+                        end
+                    "
+                >
                     <div class="tile is-ancestor">
                         <div class="tile is-parent">
                             <article class="tile is-child">
@@ -279,21 +299,5 @@
             </p>
         </div>
     </footer>
-
-    <script>
-        // Trigger the initial load of the application content
-        //  after a short delay to let all the HTMX content exist
-        document.addEventListener("DOMContentLoaded", function() {
-            setTimeout(function() {
-                var tableContent = document.querySelector('#table-content');
-                if (tableContent) {
-                    var event = new Event("customLoad");
-                    tableContent.dispatchEvent(event);
-                    console.log("Triggered load event to #table-content")
-                }
-            }, 100); // 1 second timeout
-        });
-    </script>
-
 </body>
 </html>
