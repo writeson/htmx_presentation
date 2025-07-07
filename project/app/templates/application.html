@@ -47,19 +47,31 @@
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-start">
                     <a
+                        class="navbar-item"
                         hx-get="/application/template/artists"
                         hx-vals='{"tab": "artists"}'
                         hx-trigger="click"
                         hx-target="#application-content"
-                        class="navbar-item"
+                        _="on click
+                            log 'update artist list'
+                            set currentPage to 0
+                            trigger updateDisplay(
+                                tab: 'artists',
+                                current_page: currentPage
+                            ) on #table-content
+                            for el in (closest <ul/>).querySelectorAll('.pagination-link')
+                                remove .is-current from
+                            end
+                            add .is-current to me
+                        "
                     >
                         Home
                     </a>
                     <a
+                        class="navbar-item"
                         hx-get="/application/about"
                         hx-trigger="click"
                         hx-target="#application-content"
-                        class="navbar-item"
                     >
                         About
                     </a>
@@ -67,27 +79,6 @@
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="level">
-                            <p class="control level-item has-icons-left">
-                                <input
-                                    class="input"
-                                    type="text"
-                                    placeholder="Search music..."
-                                    id="searchInput"
-                                >
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-search"></i>
-                                </span>
-                            </p>
-                            <div class="control level-item">
-                                <div class="select is-fullwidth">
-                                    <select id="filterField">
-                                        <option value="all">All Fields</option>
-                                        <option value="name">Name</option>
-                                        <option value="artist">Artist</option>
-                                        <option value="album">Album</option>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="control level-item">
                                 <div class="select is-fullwidth">
                                     <select
@@ -120,7 +111,7 @@
                 <div
                     class="tabs is-centered is-boxed"
                     _="on htmx:afterSwap from #application-content
-                        log 'htmx:afterSwap event fired'
+                        -- log 'htmx:afterSwap event fired'
                         log event.detail.pathInfo.requestPath
                         if event.detail.pathInfo.requestPath is '/application/about'
                             set my style.display to 'none'
@@ -223,7 +214,7 @@
                     class="box"
                     style="margin-top: 1em;"
                     _="on htmx:afterSwap from #application-content
-                        log 'htmx:afterSwap event fired'
+                        -- log 'htmx:afterSwap event fired'
                         log event.detail.pathInfo.requestPath
                         if event.detail.pathInfo.requestPath is '/application/about'
                             set my style.display to 'none'
