@@ -53,16 +53,11 @@
                         hx-trigger="click"
                         hx-target="#application-content"
                         _="on click
-                            log 'update artist list'
-                            set currentPage to 0
-                            trigger updateDisplay(
-                                tab: 'artists',
-                                current_page: currentPage
-                            ) on #table-content
-                            for el in (closest <ul/>).querySelectorAll('.pagination-link')
-                                remove .is-current from
+                            wait 0.2s
+                            set firstPaginationLink to first <a/> in <ul.pagination-list/>
+                            if firstPaginationLink
+                                trigger click on firstPaginationLink
                             end
-                            add .is-current to me
                         "
                     >
                         Home
@@ -206,6 +201,13 @@
                     id="application-content"
                     hx-get="/application/template/artists"
                     hx-trigger="load from:body"
+                    _="on htmx:afterSwap
+                        wait 0.2s
+                        set firstPaginationLink to first <a/> in <ul.pagination-list/>
+                        if firstPaginationLink and not firstPaginationLink.classList.contains('is-current')
+                            trigger click on firstPaginationLink
+                        end
+                    "
                 >
                 </div>
 
