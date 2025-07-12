@@ -10,11 +10,17 @@
     <link rel="stylesheet" href="/static/css/bulma/css/bulma.min.css">
     <link rel="stylesheet" href="/static/css/styles.css">
     <script src="https://kit.fontawesome.com/336253754b.js" crossorigin="anonymous"></script>
-    <script src="/static/js/htmx.min.js"></script>
-    <script src="/static/js/hyperscript.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" integrity="sha384-Akqfrbj/HpNVo8k11SXBb6TlBWmXXlYQrCSqEWmyKJe+hDm3Z/B2WVG4smwBkRVm" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
 </head>
-<body hx-ext="hyperscript">
+<body
+    hx-ext="hyperscript"
+    _="init
+        log 'hello load'
+        wait 100ms
+        trigger click on #navbar-home-link
+    "
+>
     <div id="application" class="content-wrapper">
         <!-- Header -->
         <div class="hero brand-color">
@@ -27,11 +33,18 @@
         <nav class="navbar brand-color" style="background-color: #c7e3f0;" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a
+                    class="navbar-item"
                     hx-get="/application/template/artists"
                     hx-vals='{"tab": "artists"}'
                     hx-trigger="click"
                     hx-target="#application-content"
-                    class="navbar-item"
+                    _="on click
+                        wait 0.2s
+                        set firstPaginationLink to first <a/> in <ul.pagination-list/>
+                        if firstPaginationLink
+                            trigger click on firstPaginationLink
+                        end
+                    "
                 >
                     <i class="fa-solid fa-headphones"></i>
                 </a>
@@ -47,6 +60,7 @@
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-start">
                     <a
+                        id="navbar-home-link"
                         class="navbar-item"
                         hx-get="/application/template/artists"
                         hx-vals='{"tab": "artists"}'
@@ -202,64 +216,13 @@
                     hx-get="/application/template/artists"
                     hx-trigger="load from:body"
                     _="on htmx:afterSwap
-                        wait 0.2s
+                        wait 200ms
                         set firstPaginationLink to first <a/> in <ul.pagination-list/>
                         if firstPaginationLink and not firstPaginationLink.classList.contains('is-current')
                             trigger click on firstPaginationLink
                         end
                     "
                 >
-                </div>
-
-                <!-- Stats Tiles -->
-                <div
-                    class="box"
-                    style="margin-top: 1em;"
-                    _="on htmx:afterSwap from #application-content
-                        -- log 'htmx:afterSwap event fired'
-                        log event.detail.pathInfo.requestPath
-                        if event.detail.pathInfo.requestPath is '/application/about'
-                            set my style.display to 'none'
-                        else
-                            set my style.display to 'block'
-                        end
-                    "
-                >
-                    <div class="tile is-ancestor">
-                        <div class="tile is-parent">
-                            <article class="tile is-child">
-                                <p class="heading">
-                                <span class="icon">
-                                    <i class="fas fa-clock"></i>
-                                </span>
-                                    Total Duration
-                                </p>
-                                <p class="title">347 hours</p>
-                            </article>
-                        </div>
-                        <div class="tile is-parent">
-                            <article class="tile is-child">
-                                <p class="heading">
-                                <span class="icon">
-                                    <i class="fas fa-music"></i>
-                                </span>
-                                    Total Tracks
-                                </p>
-                                <p class="title" id="totalItems">0</p>
-                            </article>
-                        </div>
-                        <div class="tile is-parent">
-                            <article class="tile is-child">
-                                <p class="heading">
-                                <span class="icon">
-                                    <i class="fas fa-tags"></i>
-                                </span>
-                                    Genres
-                                </p>
-                                <p class="title">25</p>
-                            </article>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
