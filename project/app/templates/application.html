@@ -16,7 +16,6 @@
 <body
     hx-ext="hyperscript"
     _="init
-        log 'hello load'
         wait 200ms
         trigger click on #navbar-home-link
     "
@@ -120,8 +119,6 @@
                 <div
                     class="tabs is-centered is-boxed"
                     _="on htmx:afterSwap from #application-content
-                        -- log 'htmx:afterSwap event fired'
-                        log event.detail.pathInfo.requestPath
                         if event.detail.pathInfo.requestPath is '/application/about'
                             set my style.display to 'none'
                         else
