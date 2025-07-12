@@ -17,7 +17,7 @@
     hx-ext="hyperscript"
     _="init
         log 'hello load'
-        wait 100ms
+        wait 200ms
         trigger click on #navbar-home-link
     "
 >
@@ -39,7 +39,7 @@
                     hx-trigger="click"
                     hx-target="#application-content"
                     _="on click
-                        wait 0.2s
+                        wait 100ms
                         set firstPaginationLink to first <a/> in <ul.pagination-list/>
                         if firstPaginationLink
                             trigger click on firstPaginationLink
@@ -67,7 +67,7 @@
                         hx-trigger="click"
                         hx-target="#application-content"
                         _="on click
-                            wait 0.2s
+                            wait 100ms
                             set firstPaginationLink to first <a/> in <ul.pagination-list/>
                             if firstPaginationLink
                                 trigger click on firstPaginationLink
@@ -137,14 +137,18 @@
                             hx-target="#application-content"
                             class="is-active"
                             data-tab="artists"
-                            _=" on click or updateDisplay
-                              -- Reset other <li> elements 
-                              set items to <li/> in closest <ul/>
-                              remove .is-active from items
-                              add .is-active to me
-                              log 'clicked artists tab'
+                            _="on click or updateDisplay
+                                -- Reset other <li> elements
+                                set items to <li/> in closest <ul/>
+                                remove .is-active from items
+                                add .is-active to me
+                                wait 100ms
+                                set firstPaginationLink to first <a/> in <ul.pagination-list/>
+                                if firstPaginationLink
+                                    trigger click on firstPaginationLink
+                                end
                             "
-                        >
+`                        >
                             <a>
                                 <span class="icon"><i class="fas fa-microphone"></i></span>
                                 <span>Artists</span>
@@ -156,12 +160,11 @@
                             hx-trigger="click"
                             hx-target="#application-content"
                             data-tab="albums"
-                            _=" on click
+                            _="on click
                               -- Reset other <li> elements 
                               set items to <li/> in closest <ul/>
                               remove .is-active from items
                               add .is-active to me
-                              log 'clicked'
                             "
                         >
                             <a>
@@ -175,12 +178,11 @@
                             hx-trigger="click"
                             hx-target="#application-content"
                             data-tab="customers"
-                            _=" on click
+                            _="on click
                               -- Reset other <li> elements 
                               set items to <li/> in closest <ul/>
                               remove .is-active from items
                               add .is-active to me
-                              log 'clicked'
                             "
                         >
                             <a>
