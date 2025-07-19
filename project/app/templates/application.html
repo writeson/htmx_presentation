@@ -37,13 +37,6 @@
                     hx-vals='{"tab": "artists"}'
                     hx-trigger="click"
                     hx-target="#application-content"
-                    _="on click
-                        wait 100ms
-                        set firstPaginationLink to first <a/> in <ul.pagination-list/>
-                        if firstPaginationLink
-                            trigger click on firstPaginationLink
-                        end
-                    "
                 >
                     <i class="fa-solid fa-headphones"></i>
                 </a>
@@ -65,13 +58,6 @@
                         hx-vals='{"tab": "artists"}'
                         hx-trigger="click"
                         hx-target="#application-content"
-                        _="on click
-                            wait 100ms
-                            set firstPaginationLink to first <a/> in <ul.pagination-list/>
-                            if firstPaginationLink
-                                trigger click on firstPaginationLink
-                            end
-                        "
                     >
                         Home
                     </a>
@@ -93,11 +79,12 @@
                                         id="itemsPerPage"
                                         name="items_per_page"
                                         _="on change
-                                            -- Send a click to rebuild current application view
-                                            log 'select clicked'
-                                            set icon to <i[data-sort='artist']/> in <table.table/>
-                                            if icon
-                                              trigger click on icon
+                                            -- Trigger pagination update with new items per page
+                                            log 'items per page changed'
+                                            set activeTab to <li.is-active/> in <ul/>
+                                            if activeTab
+                                                set tabName to activeTab.dataset.tab
+                                                trigger updateDisplay(tab: tabName, current_page: 1) on #table-content
                                             end
                                         "
                                     >
@@ -139,13 +126,8 @@
                                 set items to <li/> in closest <ul/>
                                 remove .is-active from items
                                 add .is-active to me
-                                wait 100ms
-                                set firstPaginationLink to first <a/> in <ul.pagination-list/>
-                                if firstPaginationLink
-                                    trigger click on firstPaginationLink
-                                end
                             "
-`                        >
+                        >
                             <a>
                                 <span class="icon"><i class="fas fa-microphone"></i></span>
                                 <span>Artists</span>
@@ -162,11 +144,6 @@
                                 set items to <li/> in closest <ul/>
                                 remove .is-active from items
                                 add .is-active to me
-                                wait 100ms
-                                set firstPaginationLink to first <a/> in <ul.pagination-list/>
-                                if firstPaginationLink
-                                    trigger click on firstPaginationLink
-                                end
                             "
                         >
                             <a>
@@ -177,11 +154,11 @@
                         <li
                             id="customers-tab"
                             hx-get="/application/template/customers"
-                            hx-trigger="click"
+                            hx-trigger="click, updateDisplay"
                             hx-target="#application-content"
                             data-tab="customers"
-                            _="on click
-                              -- Reset other <li> elements 
+                            _="on click or updateDisplay
+                              -- Reset other <li> elements
                               set items to <li/> in closest <ul/>
                               remove .is-active from items
                               add .is-active to me
@@ -195,15 +172,14 @@
                         <li
                             id="employees-tab"
                             hx-get="/application/template/employees"
-                            hx-trigger="click"
+                            hx-trigger="click, updateDisplay"
                             hx-target="#application-content"
                             data-tab="employees"
-                            _=" on click
-                              -- Reset other <li> elements 
+                            _="on click or updateDisplay
+                              -- Reset other <li> elements
                               set items to <li/> in closest <ul/>
                               remove .is-active from items
                               add .is-active to me
-                              log 'clicked'
                             "
                         >
                             <a>
@@ -215,15 +191,15 @@
                 </div>
 
                 <!-- application content goes here using HTMX -->
-                <div 
+                <div
                     id="application-content"
                     hx-get="/application/template/artists"
                     hx-trigger="load from:body"
                     _="on htmx:afterSwap
                         wait 200ms
-                        set firstPaginationLink to first <a/> in <ul.pagination-list/>
-                        if firstPaginationLink and not firstPaginationLink.classList.contains('is-current')
-                            trigger click on firstPaginationLink
+                        set paginationNav to <nav/> in me
+                        if paginationNav
+                            trigger load on paginationNav
                         end
                     "
                 >

@@ -1,26 +1,24 @@
 from pathlib import Path as PathlibPath
 
-from fastapi import APIRouter, Depends, Request, Query
+from database import get_db
+from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import select, func, desc, asc, distinct
-
-from sqlalchemy.sql.expression import text
-from sqlalchemy.sql.selectable import Select
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import aliased
-# import jinja_partials
-
-from database import get_db
-from models.artists import Artist, ArtistRead  # noqa: F401
 from models.albums import Album, AlbumRead  # noqa: F401
-from models.tracks import Track, TrackRead  # noqa: F401
-from models.playlists import Playlist, PlaylistRead  # noqa: F401
-from models.invoices import Invoice, InvoiceRead  # noqa: F401
-from models.invoice_items import InvoiceItem, InvoiceItemRead  # noqa: F401
-from models.playlist_track import PlaylistTrack  # noqa: F401
+from models.artists import Artist, ArtistRead  # noqa: F401
 from models.customers import Customer, CustomerRead  # noqa: F401
 from models.employees import Employee, EmployeeRead  # noqa: F401
+from models.invoice_items import InvoiceItem, InvoiceItemRead  # noqa: F401
+from models.invoices import Invoice, InvoiceRead  # noqa: F401
+from models.playlist_track import PlaylistTrack  # noqa: F401
+from models.playlists import Playlist, PlaylistRead  # noqa: F401
+from models.tracks import Track, TrackRead  # noqa: F401
+from sqlalchemy import asc, desc, distinct, func, select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import aliased
+from sqlalchemy.sql.selectable import Select
+
+# import jinja_partials
 
 
 # initialize the Jinja2 templates
@@ -133,10 +131,15 @@ async def get_albums(
     db: AsyncSession = Depends(get_db),
     sort: str = Query(None, alias="sort"),
     direction: str = Query(None, alias="direction"),
-    offset: int = 0,
+    current_page: int = Query(1, alias="current_page"),
     items_per_page: int = Query(10, alias="items_per_page"),
 ):
+    # Log received parameters
+    print(f"Current Page: {current_page}")
+    print(f"Items Per Page: {items_per_page}")
+
     limit = items_per_page
+    offset = items_per_page * (current_page - 1)
     async with db as session:
         query = (
             select(
@@ -186,10 +189,15 @@ async def get_customers(
     db: AsyncSession = Depends(get_db),
     sort: str = Query(None, alias="sort"),
     direction: str = Query(None, alias="direction"),
-    offset: int = 0,
+    current_page: int = Query(1, alias="current_page"),
     items_per_page: int = Query(10, alias="items_per_page"),
 ):
+    # Log received parameters
+    print(f"Current Page: {current_page}")
+    print(f"Items Per Page: {items_per_page}")
+
     limit = items_per_page
+    offset = items_per_page * (current_page - 1)
     async with db as session:
         query = (
             select(
@@ -236,10 +244,15 @@ async def get_employees(
     db: AsyncSession = Depends(get_db),
     sort: str = Query(None, alias="sort"),
     direction: str = Query(None, alias="direction"),
-    offset: int = 0,
+    current_page: int = Query(1, alias="current_page"),
     items_per_page: int = Query(10, alias="items_per_page"),
 ):
+    # Log received parameters
+    print(f"Current Page: {current_page}")
+    print(f"Items Per Page: {items_per_page}")
+
     limit = items_per_page
+    offset = items_per_page * (current_page - 1)
     async with db as session:
         Manager = aliased(Employee)
         query = (
@@ -314,12 +327,43 @@ async def pagination(
     current_page: int = Query(1, alias="current_page"),
 ):
     async with db as session:
-        # Get the table to query for pagination
-        table_name = tab.title()
-        query = select(func.count()).select_from(text(table_name))
-        results = await session.execute(query)
-        total_items = results.scalar()
-        total_pages = (total_items + items_per_page - 1) // items_per_page
+        # Get the total count based on the tab using the same queries as the data endpoints
+        total_items = 0
+
+        if tab == "artists":
+            query = select(func.count(distinct(Artist.id))).select_from(Artist)
+            results = await session.execute(query)
+            total_items = results.scalar()
+
+        elif tab == "albums":
+            query = (
+                select(func.count(distinct(Album.id)))
+                .select_from(Album)
+                .join(Album.artist)
+                .join(Album.tracks)
+            )
+            results = await session.execute(query)
+            total_items = results.scalar()
+
+        elif tab == "customers":
+            query = (
+                select(func.count(distinct(Customer.id)))
+                .select_from(Customer)
+                .join(Invoice, Invoice.customer_id == Customer.id)
+            )
+            results = await session.execute(query)
+            total_items = results.scalar()
+
+        elif tab == "employees":
+            query = select(func.count(distinct(Employee.id))).select_from(Employee)
+            results = await session.execute(query)
+            total_items = results.scalar()
+
+        total_pages = (
+            (total_items + items_per_page - 1) // items_per_page
+            if total_items > 0
+            else 1
+        )
 
         # Ensure the current page is within valid range
         current_page = max(1, min(current_page, total_pages))
@@ -363,7 +407,7 @@ def query_order_by(query: Select, path: str, sort: str, direction: str) -> Selec
         """
     Modifies the passed in query to add an order_by clause with
     a direction determined by the class_ list
-    
+
     :param query: the Select query to modify
     :param path: the path that brought us here
     :param sort: the data column to sort by
