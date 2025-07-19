@@ -170,13 +170,14 @@ async def get_albums(
                 "price": row.album_price,
             }
         )
-    return templates.TemplateResponse(
+    retval = templates.TemplateResponse(
         name="partials/albums.html",
         context={
             "request": request,
             "albums": results_list,
         },
     )
+    return retval
 
 
 @router.get("/customers", response_class=HTMLResponse)
@@ -358,7 +359,8 @@ async def pagination(
 
 
 def query_order_by(query: Select, path: str, sort: str, direction: str) -> Select:
-    """
+    (
+        """
     Modifies the passed in query to add an order_by clause with
     a direction determined by the class_ list
     
@@ -367,7 +369,9 @@ def query_order_by(query: Select, path: str, sort: str, direction: str) -> Selec
     :param sort: the data column to sort by
     :param direction: the sorting direction (asc, desc)
     :return: modified Select query
-    """ ""
+    """
+        ""
+    )
     sort_func = desc if direction == "desc" else asc
 
     match sort:

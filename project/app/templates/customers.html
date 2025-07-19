@@ -11,18 +11,18 @@
                     Customer Name
                     <span class="icon sort-icon">
                         <i
-                                hx-get="/application/customers"
-                                hx-trigger="click"
-                                hx-vals='js:{
+                            hx-get="/application/customers"
+                            hx-trigger="click"
+                            hx-vals='js:{
                                 "sort": event.target.dataset.sort,
                                 "direction": event.target.dataset.direction
                             }'
-                                hx-include="#itemsPerPage"
-                                hx-target="#table-content"
-                                class="fas fa-sort"
-                                data-sort="customer_name"
-                                data-direction="desc"
-                                _="on click
+                            hx-include="#itemsPerPage"
+                            hx-target="#table-content"
+                            class="fas fa-sort"
+                            data-sort="customer_name"
+                            data-direction="desc"
+                            _="on click
                                  -- Reset all <i> elements' classes to fa-sort
                                  set icons to <i/> in closest <tr/>
                                  remove .fa-sort-down .fa-sort-up from icons
@@ -47,18 +47,18 @@
                     Orders
                     <span class="icon sort-icon">
                         <i
-                                hx-get="/application/customers"
-                                hx-trigger="click"
-                                hx-vals='js:{
+                            hx-get="/application/customers"
+                            hx-trigger="click"
+                            hx-vals='js:{
                                 "sort": event.target.dataset.sort,
                                 "direction": event.target.dataset.direction
                             }'
-                                hx-include="#itemsPerPage"
-                                hx-target="#table-content"
-                                class="fas fa-sort"
-                                data-sort="customer_orders"
-                                data-direction="desc"
-                                _="on click
+                            hx-include="#itemsPerPage"
+                            hx-target="#table-content"
+                            class="fas fa-sort"
+                            data-sort="customer_orders"
+                            data-direction="desc"
+                            _="on click
                                  -- Reset all <i> elements' classes to fa-sort
                                  set icons to <i/> in closest <tr/>
                                  remove .fa-sort-down .fa-sort-up from icons
@@ -83,18 +83,18 @@
                     Orders Total Spent
                     <span class="icon sort-icon" data-sort="order_total">
                         <i
-                                hx-get="/application/customers"
-                                hx-trigger="click"
-                                hx-vals='js:{
+                            hx-get="/application/customers"
+                            hx-trigger="click"
+                            hx-vals='js:{
                                 "sort": event.target.dataset.sort,
                                 "direction": event.target.dataset.direction
                             }'
-                                hx-include="#itemsPerPage"
-                                hx-target="#table-content"
-                                class="fas fa-sort"
-                                data-sort="customer_orders_spent"
-                                data-direction="desc"
-                                _="on click
+                            hx-include="#itemsPerPage"
+                            hx-target="#table-content"
+                            class="fas fa-sort"
+                            data-sort="customer_orders_spent"
+                            data-direction="desc"
+                            _="on click
                                  -- Reset all <i> elements' classes to fa-sort
                                  set icons to <i/> in closest <tr/>
                                  remove .fa-sort-down .fa-sort-up from icons
@@ -122,18 +122,22 @@
             <tbody
                 id="table-content"
                 hx-get="/application/customers"
-                hx-trigger="load"
+                hx-trigger="customLoad, updateDisplay"
             >
             </tbody>
         </table>
     </div>
 
-    <!-- Pagination -->
-    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-        <a class="pagination-previous">Previous</a>
-        <a class="pagination-next">Next</a>
-        <ul class="pagination-list">
-            <!-- Populated by JavaScript -->
-        </ul>
+    <!-- Pagination populated by htmx-->
+    <nav
+            hx-get="/application/pagination"
+            hx-trigger="load"
+            hx-target="this"
+            hx-vals='js:{"tab": "customers"}'
+            hx-include="#itemsPerPage"
+            class="pagination is-centered"
+            role="navigation"
+            aria-label="pagination"
+    >
     </nav>
 </div>

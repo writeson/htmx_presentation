@@ -11,18 +11,18 @@
                     Album
                     <span class="icon sort-icon" data-sort="album">
                         <i
-                                hx-get="/application/albums"
-                                hx-trigger="click"
-                                hx-vals='js:{
+                            hx-get="/application/albums"
+                            hx-trigger="click"
+                            hx-vals='js:{
                                 "sort": event.target.dataset.sort,
                                 "direction": event.target.dataset.direction
                             }'
-                                hx-include="#itemsPerPage"
-                                hx-target="#table-content"
-                                class="fas fa-sort"
-                                data-sort="album_title"
-                                data-direction="desc"
-                                _="on click
+                            hx-include="#itemsPerPage"
+                            hx-target="#table-content"
+                            class="fas fa-sort"
+                            data-sort="album_title"
+                            data-direction="desc"
+                            _="on click
                                  -- Reset all <i> elements' classes to fa-sort
                                  set icons to <i/> in closest <tr/>
                                  remove .fa-sort-down .fa-sort-up from icons
@@ -47,18 +47,18 @@
                     Artist
                     <span class="icon sort-icon" data-sort="artist">
                         <i
-                                hx-get="/application/albums"
-                                hx-trigger="click"
-                                hx-vals='js:{
+                            hx-get="/application/albums"
+                            hx-trigger="click"
+                            hx-vals='js:{
                                 "sort": event.target.dataset.sort,
                                 "direction": event.target.dataset.direction
                             }'
-                                hx-include="#itemsPerPage"
-                                hx-target="#table-content"
-                                class="fas fa-sort"
-                                data-sort="album_artist"
-                                data-direction="desc"
-                                _="on click
+                            hx-include="#itemsPerPage"
+                            hx-target="#table-content"
+                            class="fas fa-sort"
+                            data-sort="album_artist"
+                            data-direction="desc"
+                            _="on click
                                  -- Reset all <i> elements' classes to fa-sort
                                  set icons to <i/> in closest <tr/>
                                  remove .fa-sort-down .fa-sort-up from icons
@@ -83,18 +83,18 @@
                     Duration
                     <span class="icon sort-icon" data-sort="duration">
                         <i
-                                hx-get="/application/albums"
-                                hx-trigger="click"
-                                hx-vals='js:{
+                            hx-get="/application/albums"
+                            hx-trigger="click"
+                            hx-vals='js:{
                                 "sort": event.target.dataset.sort,
                                 "direction": event.target.dataset.direction
                             }'
-                                hx-include="#itemsPerPage"
-                                hx-target="#table-content"
-                                class="fas fa-sort"
-                                data-sort="album_duration"
-                                data-direction="desc"
-                                _="on click
+                            hx-include="#itemsPerPage"
+                            hx-target="#table-content"
+                            class="fas fa-sort"
+                            data-sort="album_duration"
+                            data-direction="desc"
+                            _="on click
                                  -- Reset all <i> elements' classes to fa-sort
                                  set icons to <i/> in closest <tr/>
                                  remove .fa-sort-down .fa-sort-up from icons
@@ -119,18 +119,18 @@
                     Price
                     <span class="icon sort-icon" data-sort="price">
                         <i
-                                hx-get="/application/albums"
-                                hx-trigger="click"
-                                hx-vals='js:{
+                            hx-get="/application/albums"
+                            hx-trigger="click"
+                            hx-vals='js:{
                                 "sort": event.target.dataset.sort,
                                 "direction": event.target.dataset.direction
                             }'
-                                hx-include="#itemsPerPage"
-                                hx-target="#table-content"
-                                class="fas fa-sort"
-                                data-sort="album_price"
-                                data-direction="desc"
-                                _="on click
+                            hx-include="#itemsPerPage"
+                            hx-target="#table-content"
+                            class="fas fa-sort"
+                            data-sort="album_price"
+                            data-direction="desc"
+                            _="on click
                                  -- Reset all <i> elements' classes to fa-sort
                                  set icons to <i/> in closest <tr/>
                                  remove .fa-sort-down .fa-sort-up from icons
@@ -158,18 +158,22 @@
             <tbody
                 id="table-content"
                 hx-get="/application/albums"
-                hx-trigger="load"
+                hx-trigger="customLoad, updateDisplay"
             >
             </tbody>
         </table>
     </div>
 
-    <!-- Pagination -->
-    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-        <a class="pagination-previous">Previous</a>
-        <a class="pagination-next">Next</a>
-        <ul class="pagination-list">
-            <!-- Populated by JavaScript -->
-        </ul>
+    <!-- Pagination populated by htmx-->
+    <nav
+            hx-get="/application/pagination"
+            hx-trigger="load"
+            hx-target="this"
+            hx-vals='js:{"tab": "albums"}'
+            hx-include="#itemsPerPage"
+            class="pagination is-centered"
+            role="navigation"
+            aria-label="pagination"
+    >
     </nav>
 </div>

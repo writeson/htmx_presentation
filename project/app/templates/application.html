@@ -157,11 +157,16 @@
                             hx-trigger="click"
                             hx-target="#application-content"
                             data-tab="albums"
-                            _="on click
-                              -- Reset other <li> elements 
-                              set items to <li/> in closest <ul/>
-                              remove .is-active from items
-                              add .is-active to me
+                            _="on click or updateDisplay
+                                -- Reset other <li> elements
+                                set items to <li/> in closest <ul/>
+                                remove .is-active from items
+                                add .is-active to me
+                                wait 100ms
+                                set firstPaginationLink to first <a/> in <ul.pagination-list/>
+                                if firstPaginationLink
+                                    trigger click on firstPaginationLink
+                                end
                             "
                         >
                             <a>
