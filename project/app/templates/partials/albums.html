@@ -1,21 +1,21 @@
-{% for employee in employees %}
+{% for album in albums %}
     <tr>
         <td>
-            {{ employee["employee_fullname"] }}
+            {{ album["title"] }}
         </td>
         <td>
-            {{ employee["manager_fullname"] }}
+            {{ album["artist"] }}
         </td>
         <td class="has-text-right pr-6">
-            {{ employee["employee_total_customers"] }}
+            {{ album["minutes"] }}:{{ "%02d" | format(album["seconds"]) }}
         </td>
         <td class="has-text-right pr-6">
-            ${{ employee["employee_total_customers_spent"] }}
+            $ {{ album["price"] }}
         </td>
         <td>
             <button 
                 class="button is-small is-info view-details" 
-                data-id="{{ employee['id'] }}"
+                data-id="{{ album['title'] }}"
             >
                 <span class="icon is-small">
                   <i class="fas fa-info-circle"></i>
